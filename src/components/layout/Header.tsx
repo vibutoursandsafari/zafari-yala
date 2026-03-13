@@ -11,6 +11,10 @@ export default function Header() {
   const [isOverHero, setIsOverHero] = useState(false);
   const pathname = usePathname();
 
+  // Hide header on admin routes
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
   useEffect(() => {
     // Only observe hero on home page
     if (pathname !== '/') {
