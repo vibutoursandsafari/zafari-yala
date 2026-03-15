@@ -1,3 +1,5 @@
+import type { ArticleImage } from './articleImage';
+
 export interface Article {
   id: string;
   title: string;
@@ -5,5 +7,5 @@ export interface Article {
   category: string;
   author: string;
   created_at: string | Date;
-  image?: string;
+  images?: ArticleImage[];
 }
