@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -30,6 +30,18 @@ export default function AdminDashboard() {
   const [author, setAuthor] = useState('');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 5) {
+      setMessage('Maximum 5 images allowed');
+      setSelectedFiles(files.slice(0, 5));
+      return;
+    }
+    setSelectedFiles(files);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,12 +51,50 @@ export default function AdminDashboard() {
       return;
     }
 
+    if (selectedFiles.length > 5) {
+      setMessage('Maximum 5 images allowed');
+      return;
+    }
+
+    if (!user) {
+      setMessage('Unauthorized');
+      return;
+    }
+
+    const token = await user.getIdToken();
+
     setSaving(true);
     try {
+      // Upload images first (if any)
+      const uploadedImages: Array<{ url: string; publicId?: string }> = [];
+      for (const file of selectedFiles) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const uploadRes = await fetch('/api/articles/upload', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        if (!uploadRes.ok) {
+          const uploadData = await uploadRes.json().catch(() => ({}));
+          throw new Error(uploadData?.error || 'Failed to upload image');
+        }
+
+        const uploadData = await uploadRes.json();
+        uploadedImages.push({ url: uploadData.url, publicId: uploadData.publicId });
+      }
+
       const res = await fetch('/api/articles', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, content, category, author }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title, content, category, author, images: uploadedImages }),
       });
 
       if (!res.ok) {
@@ -58,6 +108,10 @@ export default function AdminDashboard() {
       setContent('');
       setCategory('');
       setAuthor('');
+      setSelectedFiles([]);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     } catch (err: unknown) {
       setMessage(err instanceof Error ? err.message : 'Failed to create article');
     } finally {
@@ -96,6 +150,21 @@ export default function AdminDashboard() {
             <section>
               <h2 className="text-xl text-black font-semibold mb-4">Publish Article</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Images (max 5)</label>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleFilesChange}
+                    className="mt-1 block w-full border border-gray-400 p-2 text-gray-900"
+                  />
+                  <div className="mt-2 text-xs text-gray-600">
+                    {selectedFiles.length} selected
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Title</label>
                   <input
