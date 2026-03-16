@@ -18,7 +18,11 @@ export async function getArticles(): Promise<Article[]> {
         category: data.category || '',
         author: data.author || '',
         created_at: data.created_at?.toDate?.() || data.created_at || new Date(),
-        image: '/assets/images/about1.jpg', // temporary placeholder image
+        // support multiple images stored as an array of { url, publicId }
+        images: Array.isArray(data.images)
+          ? data.images.map((img: any) => ({ url: img.url || img, publicId: img.publicId }))
+          : undefined,
+        // Note: single-image fallback removed; use `images` array instead
       });
     });
     

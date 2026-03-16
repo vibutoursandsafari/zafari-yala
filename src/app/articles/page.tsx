@@ -74,7 +74,7 @@ export default function ArticlesPage() {
                 id={article.id}
                 title={article.title}
                 content={article.content}
-                image={article.image || '/assets/images/about1.jpg'}
+                image={(article.images && article.images.length > 0) ? article.images[0].url : '/assets/images/about1.jpg'}
                 category={article.category}
                 author={article.author}
                 createdDate={typeof article.created_at === 'string' ? article.created_at : article.created_at.toISOString()}
