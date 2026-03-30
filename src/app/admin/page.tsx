@@ -4,6 +4,16 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 
+// slug generator
+const slugify = (s: string) =>
+  s
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .slice(0, 100);
+
 export default function AdminDashboard() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
@@ -65,6 +75,10 @@ export default function AdminDashboard() {
 
     setSaving(true);
     try {
+      const rawSlug = slugify(title || '');
+      const slug = rawSlug && rawSlug.length > 0
+        ? rawSlug
+        : `untitled-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,6)}`;
       // Upload images first (if any)
       const uploadedImages: Array<{ url: string; publicId?: string }> = [];
       for (const file of selectedFiles) {
@@ -94,7 +108,7 @@ export default function AdminDashboard() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, content, category, author, images: uploadedImages }),
+        body: JSON.stringify({ title, slug, content, category, author, images: uploadedImages }),
       });
 
       if (!res.ok) {
