@@ -13,8 +13,8 @@ export default function Home() {
       <Packages />
       <RoadMap />
       <Contact />
-      <About />
       <Gallery />
+      <About />
     </main>
   );
 }

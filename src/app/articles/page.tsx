@@ -6,6 +6,7 @@ import ArticleCardSkeleton from '@/components/articles/ArticleCardSkeleton';
 import { FiBook } from 'react-icons/fi';
 import { getArticles } from '@/services/articleService';
 import type { Article } from '@/types/article';
+import Link from 'next/link';
 
 const categories = ['All', 'Wildlife', 'Animals', 'Safari Guide', 'Culture'];
 
@@ -68,18 +69,22 @@ export default function ArticlesPage() {
         {/* Articles Grid */}
         {!loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredArticles.map((article) => (
-              <ArticlesCard 
-                key={article.id} 
-                id={article.id}
-                title={article.title}
-                content={article.content}
-                image={(article.images && article.images.length > 0) ? article.images[0].url : '/assets/images/about1.jpg'}
-                category={article.category}
-                author={article.author}
-                createdDate={typeof article.created_at === 'string' ? article.created_at : article.created_at.toISOString()}
-              />
-            ))}
+            {filteredArticles.map((article) => {
+              const href = `/articles/${article.id}${article.slug ? '/' + article.slug : ''}`;
+              return (
+                <Link key={article.id} href={href} className="block">
+                  <ArticlesCard 
+                    id={article.id}
+                    title={article.title}
+                    content={article.content}
+                    image={(article.images && article.images.length > 0) ? article.images[0].url : '/assets/images/about1.jpg'}
+                    category={article.category}
+                    author={article.author}
+                    createdDate={typeof article.created_at === 'string' ? article.created_at : article.created_at.toISOString()}
+                  />
+                </Link>
+              );
+            })}
           </div>
         )}
 
