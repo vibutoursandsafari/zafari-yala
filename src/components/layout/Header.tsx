@@ -6,15 +6,10 @@ import { usePathname } from 'next/navigation';
 import { FiArrowRight } from 'react-icons/fi';
 
 export default function Header() {
-  
   // Header color only transparent when over hero section
   const [isOverHero, setIsOverHero] = useState(false);
+  const [hash, setHash] = useState('');
   const pathname = usePathname();
-
-  // Hide header on admin routes
-  if (pathname?.startsWith('/admin')) {
-    return null;
-  }
   useEffect(() => {
     // Only observe hero on home page
     if (pathname !== '/') {
@@ -40,9 +35,6 @@ export default function Header() {
     };
   }, [pathname]);
 
-  // Active link underline logic
-  const [hash, setHash] = useState('');
-
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const updateHash = () => setHash(window.location.hash || '');
@@ -54,6 +46,11 @@ export default function Header() {
   const headerBg = (isOverHero && pathname === '/')
     ? 'bg-white/5 backdrop-blur-md border-white/20'
     : 'bg-[#022814]/95 backdrop-blur-sm border-[#022814]/60';
+
+  // Hide header on admin routes
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 border-b shadow-sm transition-all duration-300 ${headerBg}`}>
@@ -67,7 +64,7 @@ export default function Header() {
       <div className="container mx-auto px-6 py-6 flex items-center justify-between relative z-10">
         {/* Logo */}
         <div className="text-2xl font-bold text-white hover:text-blue-600 transition-colors duration-300 cursor-pointer">
-          Zafari.
+          Safari.
         </div>
 
         {/* Navigation Menu */}
@@ -79,27 +76,27 @@ export default function Header() {
             Home
             <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${pathname === '/' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
-          <a
-            href="#gallery"
+          <Link
+            href="/gallery"
             className="text-white hover:text-white transition-all duration-300 relative group"
           >
             Gallery
-            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${hash === '#gallery' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
-          </a>
-          <a
+            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${pathname === '/gallery' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+          </Link>
+          <Link
             href="/articles"
             className="text-white hover:text-white transition-all duration-300 relative group"
           >
             Articles
             <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${pathname === '/articles' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
-          </a>
-          <a
-            href="#about"
+          </Link>
+          <Link
+            href="/#about"
             className="text-white hover:text-white transition-all duration-300 relative group"
           >
             About Us
             <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${hash === '#about' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
-          </a>
+          </Link>
         </nav>
 
         {/* Get Started Button */}
