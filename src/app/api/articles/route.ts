@@ -2,6 +2,19 @@ import { NextResponse } from 'next/server';
 import { adminAuth, adminDb } from '@/lib/firebaseAdmin';
 import admin from 'firebase-admin';
 
+type ArticleImageInput = {
+  url?: string;
+  publicId?: string;
+};
+
+type CreateArticleBody = {
+  title?: string;
+  content?: string;
+  category?: string;
+  author?: string;
+  images?: ArticleImageInput[];
+};
+
 /* writing via Admin SDK bypasses Firestore rules, so the server must enforce who may create articles.
 Token verification ensures only logged-in/authorized users can write. */
 
@@ -18,7 +31,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await req.json();
+    const body: CreateArticleBody = await req.json();
     const { title, content, category, author, images } = body;
 
     if (!title || !content) {
@@ -40,7 +53,7 @@ export async function POST(req: Request) {
       category: category || '',
       author: author || '',
       images: Array.isArray(images)
-        ? images.map((img: any) => ({ url: img?.url, publicId: img?.publicId }))
+        ? images.map((img) => ({ url: img?.url, publicId: img?.publicId }))
         : [],
       created_at: admin.firestore.FieldValue.serverTimestamp(),
     });
