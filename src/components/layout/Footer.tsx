@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import { FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
 
@@ -19,7 +20,7 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               <div className="h-12 w-12 rounded-md bg-white/10 flex items-center justify-center text-white font-bold text-lg">Z</div>
               <div>
-                <div className="text-2xl font-bold">Zafari</div>
+                <div className="text-2xl font-bold">Yala wild spirit</div>
                 <div className="text-sm text-emerald-200">Guided safaris & bespoke adventures</div>
               </div>
             </div>
@@ -56,7 +57,7 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold text-emerald-100 mb-3">Articles</h4>
             <ul className="space-y-2 text-sm text-emerald-200">
-              <li><a href="/articles" className="hover:text-white">Latest Stories</a></li>
+              <li><Link href="/articles" className="hover:text-white">Latest Stories</Link></li>
               <li><a href="#" className="hover:text-white">Photography Tips</a></li>
               <li><a href="#" className="hover:text-white">Conservation</a></li>
               <li><a href="#" className="hover:text-white">Travel Advice</a></li>
@@ -67,8 +68,9 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold text-emerald-100 mb-3">Contact</h4>
             <div className="text-sm text-emerald-200 space-y-3">
-              <div className="flex items-center gap-2"><FiPhone /><span>+94 77 123 4567</span></div>
-              <div className="flex items-center gap-2"><FiMail /><span>hello@zafari.example</span></div>
+              <div className="flex items-center gap-2"><FiPhone /><span>+94 76 327 2593</span></div>
+              <div className="flex items-center gap-2"><FiMail /><span>vibutoursandsafari@gmail.com
+</span></div>
               <div className="flex items-center gap-2"><FiMapPin /><span>Yala National Park, Sri Lanka</span></div>
             </div>
 
@@ -77,7 +79,7 @@ export default function Footer() {
               <div className="grid grid-cols-2 gap-2 text-sm text-emerald-200">
                 <a href="#roadmap" className="hover:text-white">Road Map</a>
                 <a href="#packages" className="hover:text-white">Packages</a>
-                <a href="/articles" className="hover:text-white">Articles</a>
+                <Link href="/articles" className="hover:text-white">Articles</Link>
                 <a href="#contact" className="hover:text-white">Contact</a>
               </div>
             </div>

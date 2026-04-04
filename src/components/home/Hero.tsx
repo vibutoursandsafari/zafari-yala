@@ -87,7 +87,7 @@ export default function Hero() {
         {/* Social icons */}
         <div className="flex items-center gap-4">
           <a
-            href="https://wa.me/"
+            href="https://wa.me/94763272593"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm text-white hover:bg-green-500 hover:border-green-500 transition-all duration-300 hover:scale-110"
