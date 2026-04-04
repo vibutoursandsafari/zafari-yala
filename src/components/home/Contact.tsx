@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
 import { useState } from 'react';
+import emailjs from '@emailjs/browser';
 import {
   FiUser,
   FiMail,
@@ -18,6 +19,53 @@ import {
 
 export default function Contact() {
   const [focused, setFocused] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    country: '',
+    message: '',
+  });
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID';
+  const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
+  const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY';
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!formData.name || !formData.email || !formData.message) {
+      setError('Please fill name, email and message.');
+      return;
+    }
+
+    setSending(true);
+    try {
+      const templateParams = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        country: formData.country,
+        message: formData.message,
+      } as Record<string, string>;
+
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+      setSent(true);
+      // reset form
+      setFormData({ name: '', email: '', phone: '', country: '', message: '' });
+    } catch (err) {
+      console.error('Email send error', err);
+      setError('Failed to send message — please try again later.');
+    } finally {
+      setSending(false);
+      // clear success after a short moment
+      setTimeout(() => setSent(false), 4000);
+    }
+  };
 
   return (
     <section id="contact" className="relative bg-white py-24 overflow-hidden font-sans">
@@ -40,7 +88,7 @@ export default function Contact() {
                     <span className="text-gray-600 text-sm">Phone</span>
                   </div>
                   <a href="tel:+94771234567" className="text-gray-900 font-medium hover:text-[#034d27] transition-colors text-sm">
-                    +94 77 123 4567
+                    +94 76 327 2593
                   </a>
                 </div>
 
@@ -49,8 +97,8 @@ export default function Contact() {
                     <FiMail className="text-[#034d27] flex-shrink-0" size={18} />
                     <span className="text-gray-600 text-sm">Email</span>
                   </div>
-                  <a href="mailto:info@zafariyala.com" className="text-gray-900 font-medium hover:text-[#034d27] transition-colors text-sm">
-                    info@zafariyala.com
+                  <a href="mailto:vibutoursandsafari@gmail.com" className="text-gray-900 font-medium hover:text-[#034d27] transition-colors text-sm">
+                    vibutoursandsafari@gmail.com
                   </a>
                 </div>
 
@@ -60,7 +108,7 @@ export default function Contact() {
                     <span className="text-gray-600 text-sm">Location</span>
                   </div>
                   <p className="text-gray-900 font-medium text-right max-w-[60%] text-sm">
-                    Yala National Park Road, Yala, Sri Lanka
+                    Yala National Park, Yala, Sri Lanka
                   </p>
                 </div>
               </div>
@@ -90,7 +138,7 @@ export default function Contact() {
                   </a>
 
                   <a
-                    href="https://wa.me/94771234567"
+                    href="https://wa.me/94763272593"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-xl hover:border-[#034d27] hover:bg-gray-50 transition-all group"
@@ -127,7 +175,7 @@ export default function Contact() {
               </p>
 
               {/* Form */}
-              <form className="flex flex-col gap-5" noValidate>
+              <form className="flex flex-col gap-5" noValidate onSubmit={handleSubmit}>
                 {/* Name & Email row */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   {/* Name */}
@@ -149,6 +197,8 @@ export default function Contact() {
                       <input
                         type="text"
                         placeholder="James Frank"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         onFocus={() => setFocused('name')}
                         onBlur={() => setFocused(null)}
                         className="bg-transparent text-gray-900 placeholder-gray-400 text-sm w-full outline-none"
@@ -175,6 +225,8 @@ export default function Contact() {
                       <input
                         type="email"
                         placeholder="james@yahoo.com"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         onFocus={() => setFocused('email')}
                         onBlur={() => setFocused(null)}
                         className="bg-transparent text-gray-900 placeholder-gray-400 text-sm w-full outline-none"
@@ -204,6 +256,8 @@ export default function Contact() {
                       <input
                         type="tel"
                         placeholder="+94 77 123 4567"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         onFocus={() => setFocused('phone')}
                         onBlur={() => setFocused(null)}
                         className="bg-transparent text-gray-900 placeholder-gray-400 text-sm w-full outline-none"
@@ -230,6 +284,8 @@ export default function Contact() {
                       <input
                         type="text"
                         placeholder="Sri Lanka"
+                        value={formData.country}
+                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                         onFocus={() => setFocused('country')}
                         onBlur={() => setFocused(null)}
                         className="bg-transparent text-gray-900 placeholder-gray-400 text-sm w-full outline-none"
@@ -257,6 +313,8 @@ export default function Contact() {
                     <textarea
                       rows={4}
                       placeholder="Tell us your preferred dates, group size, and any special requests…"
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       onFocus={() => setFocused('message')}
                       onBlur={() => setFocused(null)}
                       className="bg-transparent text-gray-900 placeholder-gray-400 text-sm w-full outline-none resize-none"
@@ -267,16 +325,19 @@ export default function Contact() {
                 {/* Send button */}
                 <button
                   type="submit"
-                  className="group flex items-center justify-center gap-2.5 bg-[#034d27] hover:bg-[#09522f] text-white font-semibold text-sm px-6 py-3.5 rounded-xl transition transform duration-150 hover:-translate-y-0.5 active:scale-95"
+                  disabled={sending}
+                  className={`group flex items-center justify-center gap-2.5 ${sending ? 'bg-emerald-500/80 cursor-wait' : 'bg-[#034d27] hover:bg-[#09522f]'} text-white font-semibold text-sm px-6 py-3.5 rounded-xl transition transform duration-150 ${sending ? '' : 'hover:-translate-y-0.5 active:scale-95'}`}
                 >
                   <FiSend size={15} />
-                  <span>Send Message</span>
+                  <span>{sending ? 'Sending…' : 'Send Message'}</span>
                   <FiChevronRight
                     size={15}
-                    className="opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all duration-200"
+                    className={`opacity-0 -ml-2 ${sending ? '' : 'group-hover:opacity-100 group-hover:ml-0'} transition-all duration-200`}
                   />
                 </button>
               </form>
+              {sent && <div className="mt-4 text-sm text-emerald-600">Message sent — we will reply soon.</div>}
+              {error && <div className="mt-4 text-sm text-red-600">{error}</div>}
             </div>
           </div>
 

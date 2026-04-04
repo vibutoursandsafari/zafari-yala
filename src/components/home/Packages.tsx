@@ -119,7 +119,7 @@ export default function Packages() {
   ];
 
   return (
-    <section className="py-6 md:py-12 bg-gray-50">
+    <section className="py-6 md:py-12 bg-[linear-gradient(135deg,#f5f7f2_0%,#eaf4e4_45%,#dfeedd_100%)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-12">
