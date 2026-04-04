@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaWhatsapp, FaFacebookF, FaInstagram, FaPlay, FaPhone } from 'react-icons/fa';
 import { MdOutlineWorkHistory } from 'react-icons/md';
+import { getReviews } from '@/services/reviewService';
+import type { Review } from '@/types/review';
 
 const bgImages = [
   '/assets/images/cover_img_01.jpg',
@@ -12,12 +14,28 @@ const bgImages = [
 
 export default function Hero() {
   const [current, setCurrent] = useState(0);
+  const [latestReview, setLatestReview] = useState<Review | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % bgImages.length);
     }, 10000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const loadLatestReview = async () => {
+      try {
+        const reviews = await getReviews();
+        if (reviews.length > 0) {
+          setLatestReview(reviews[0]);
+        }
+      } catch (error) {
+        console.error('Failed to load latest review:', error);
+      }
+    };
+
+    loadLatestReview();
   }, []);
 
   return (
@@ -78,9 +96,11 @@ export default function Hero() {
           <span className="text-amber-400 text-4xl leading-none font-serif mt-0 shrink-0">&ldquo;</span>
           <div className="min-w-0">
             <p className="text-white text-xs sm:text-sm leading-relaxed italic line-clamp-3">
-              An absolutely breathtaking experience &mdash; spotted leopards, elephants, and crocodiles in one magical morning!
+              {latestReview?.message || 'An absolutely breathtaking experience — spotted leopards, elephants, and crocodiles in one magical morning!'}
             </p>
-            <p className="text-white text-xs font-semibold mt-2">&mdash; Samantha R., Australia</p>
+            <p className="text-white text-xs font-semibold mt-2">
+              &mdash; {latestReview?.name || 'Samantha R., Australia'}
+            </p>
           </div>
         </div>
 
