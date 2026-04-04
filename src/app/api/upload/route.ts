@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
+import { adminAuth } from '@/lib/firebaseAdmin';
 
 // Configure Cloudinary
 cloudinary.config({
@@ -8,8 +9,27 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+async function requireAuth(request: NextRequest) {
+  const authHeader = request.headers.get('authorization') || '';
+  if (!authHeader.startsWith('Bearer ')) {
+    return null;
+  }
+
+  const token = authHeader.slice('Bearer '.length);
+  try {
+    return await adminAuth.verifyIdToken(token);
+  } catch {
+    return null;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
+    const decoded = await requireAuth(request);
+    if (!decoded) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
@@ -44,6 +64,11 @@ export async function POST(request: NextRequest) {
 // Delete image from Cloudinary
 export async function DELETE(request: NextRequest) {
   try {
+    const decoded = await requireAuth(request);
+    if (!decoded) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { publicId } = await request.json();
 
     if (!publicId) {

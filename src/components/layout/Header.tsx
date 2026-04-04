@@ -1,20 +1,16 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { FiArrowRight } from 'react-icons/fi';
+import { FaWhatsapp } from 'react-icons/fa';
 
 export default function Header() {
-  
   // Header color only transparent when over hero section
   const [isOverHero, setIsOverHero] = useState(false);
+  const [hash, setHash] = useState('');
   const pathname = usePathname();
-
-  // Hide header on admin routes
-  if (pathname?.startsWith('/admin')) {
-    return null;
-  }
   useEffect(() => {
     // Only observe hero on home page
     if (pathname !== '/') {
@@ -40,9 +36,6 @@ export default function Header() {
     };
   }, [pathname]);
 
-  // Active link underline logic
-  const [hash, setHash] = useState('');
-
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const updateHash = () => setHash(window.location.hash || '');
@@ -55,6 +48,11 @@ export default function Header() {
     ? 'bg-white/5 backdrop-blur-md border-white/20'
     : 'bg-[#022814]/95 backdrop-blur-sm border-[#022814]/60';
 
+  // Hide header on admin routes
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 border-b shadow-sm transition-all duration-300 ${headerBg}`}>
       {/* Decorative diagonal lines when header is not over hero */}
@@ -66,9 +64,16 @@ export default function Header() {
 
       <div className="container mx-auto px-6 py-6 flex items-center justify-between relative z-10">
         {/* Logo */}
-        <div className="text-2xl font-bold text-white hover:text-blue-600 transition-colors duration-300 cursor-pointer">
-          Zafari.
-        </div>
+        <Link href="/" className="inline-flex items-center" aria-label="Go to homepage">
+          <Image
+            src="/assets/images/yala_logo.png"
+            alt="Yala Wild logo"
+            width={110}
+            height={44}
+            priority
+            className="h-11 w-auto object-contain"
+          />
+        </Link>
 
         {/* Navigation Menu */}
         <nav className="hidden md:flex items-center space-x-8">
@@ -79,34 +84,45 @@ export default function Header() {
             Home
             <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${pathname === '/' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
-          <a
-            href="#gallery"
+          <Link
+            href="/gallery"
             className="text-white hover:text-white transition-all duration-300 relative group"
           >
             Gallery
-            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${hash === '#gallery' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
-          </a>
-          <a
+            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${pathname === '/gallery' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+          </Link>
+          <Link
             href="/articles"
             className="text-white hover:text-white transition-all duration-300 relative group"
           >
             Articles
             <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${pathname === '/articles' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
-          </a>
-          <a
-            href="#about"
+          </Link>
+          <Link
+            href="/#about"
             className="text-white hover:text-white transition-all duration-300 relative group"
           >
             About Us
             <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${hash === '#about' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
-          </a>
+          </Link>
         </nav>
 
-        {/* Get Started Button */}
-        <button className="flex items-center gap-2 border border-white bg-transparent text-white px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 hover:bg-white/10 hover:scale-105">
-          <span>Get Started</span>
-          <FiArrowRight className="w-4 h-4" />
-        </button>
+        {/* WhatsApp Button */}
+        <a
+          href="https://wa.me/94763272593"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-white/45 bg-[linear-gradient(135deg,#25D366_0%,#1ebe5d_100%)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-900/35 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-900/45"
+          aria-label="Chat on WhatsApp"
+          title="Chat on WhatsApp"
+        >
+          <span className="pointer-events-none absolute inset-0 -translate-x-full bg-[linear-gradient(115deg,transparent_25%,rgba(255,255,255,0.35)_50%,transparent_75%)] transition-transform duration-700 group-hover:translate-x-full" />
+          <span className="relative flex h-5 w-5 items-center justify-center">
+            <span className="absolute inline-flex h-5 w-5 rounded-full bg-white/35 animate-ping" />
+            <FaWhatsapp className="relative h-4 w-4" />
+          </span>
+          <span className="relative">WhatsApp</span>
+        </a>
       </div>
     </header>
   );

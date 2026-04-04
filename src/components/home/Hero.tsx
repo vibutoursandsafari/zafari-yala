@@ -65,7 +65,7 @@ export default function Hero() {
 
         {/* Heading */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-none mb-4 whitespace-nowrap">
-          Zafari <span className="text-amber-400">Tours</span>
+          Yala wild <span className="text-amber-400">spirit</span>
         </h1>
 
         {/* Sub text */}
@@ -87,7 +87,7 @@ export default function Hero() {
         {/* Social icons */}
         <div className="flex items-center gap-4">
           <a
-            href="https://wa.me/"
+            href="https://wa.me/94763272593"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm text-white hover:bg-green-500 hover:border-green-500 transition-all duration-300 hover:scale-110"
@@ -132,14 +132,14 @@ export default function Hero() {
           </div>
           {/* Guide details */}
           <div className="flex flex-col gap-2">
-            <p className="font-bold text-white text-lg">Ravindu Gimhan Perera</p>
+            <p className="font-bold text-white text-lg">Ravindu Vibushana Abrew</p>
               <div className="flex items-center gap-2 text-gray-300 text-sm">
               <MdOutlineWorkHistory className="w-4 h-4 text-amber-400" />
               <span>3 years experience</span>
             </div>
               <div className="flex items-center gap-2 text-gray-300 text-sm">
               <FaPhone className="w-4 h-4 text-amber-400" />
-              <span>+94 77 555 1234</span>
+              <span>+94 76 327 2593</span>
             </div>
           </div>
           </div>
