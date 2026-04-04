@@ -62,16 +62,16 @@ export default function Header() {
         }} />
       )}
 
-      <div className="container mx-auto px-6 py-6 flex items-center justify-between relative z-10">
+      <div className="container mx-auto px-6 py-4 md:px-16 flex items-center justify-between relative z-10">
         {/* Logo */}
         <Link href="/" className="inline-flex items-center" aria-label="Go to homepage">
           <Image
-            src="/assets/images/yala_logo.png"
+            src="/assets/images/logo_yala_wild_spirit.png"
             alt="Yala Wild logo"
-            width={110}
-            height={44}
+            width={100}
+            height={100}
             priority
-            className="h-11 w-auto object-contain"
+            className="h-14 w-auto object-contain bg-transparent"
           />
         </Link>
 
