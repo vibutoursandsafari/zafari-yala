@@ -62,16 +62,16 @@ export default function Header() {
         }} />
       )}
 
-      <div className="container mx-auto px-6 py-6 flex items-center justify-between relative z-10">
+      <div className="container mx-auto px-6 py-4 md:px-16 flex items-center justify-between relative z-10">
         {/* Logo */}
         <Link href="/" className="inline-flex items-center" aria-label="Go to homepage">
           <Image
-            src="/assets/images/yala_logo.png"
+            src="/assets/images/logo_yala_wild_spirit.png"
             alt="Yala Wild logo"
-            width={110}
-            height={44}
+            width={100}
+            height={100}
             priority
-            className="h-11 w-auto object-contain"
+            className="h-14 w-auto object-contain bg-transparent"
           />
         </Link>
 
@@ -112,14 +112,14 @@ export default function Header() {
           href="https://wa.me/94763272593"
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-white/45 bg-[linear-gradient(135deg,#25D366_0%,#1ebe5d_100%)] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-900/35 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-900/45"
+          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-gray-100 bg-transparent px-5 py-2 text-sm font-semibold text-white/95 transition-all duration-200 hover:bg-gray-100/5"
           aria-label="Chat on WhatsApp"
           title="Chat on WhatsApp"
         >
-          <span className="pointer-events-none absolute inset-0 -translate-x-full bg-[linear-gradient(115deg,transparent_25%,rgba(255,255,255,0.35)_50%,transparent_75%)] transition-transform duration-700 group-hover:translate-x-full" />
+          <span className="pointer-events-none absolute inset-0 -translate-x-full bg-[linear-gradient(115deg,transparent_25%,rgba(255,255,255,0.06)_50%,transparent_75%)] transition-transform duration-700 group-hover:translate-x-full" />
           <span className="relative flex h-5 w-5 items-center justify-center">
-            <span className="absolute inline-flex h-5 w-5 rounded-full bg-white/35 animate-ping" />
-            <FaWhatsapp className="relative h-4 w-4" />
+            <span className="absolute inline-flex h-5 w-5 rounded-full bg-white/10 animate-ping" />
+            <FaWhatsapp className="relative h-5 w-5" />
           </span>
           <span className="relative">WhatsApp</span>
         </a>

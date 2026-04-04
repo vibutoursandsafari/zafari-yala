@@ -45,10 +45,20 @@ export default function RoadMap() {
   return (
     <section className="relative bg-[#034d27] py-16 overflow-hidden font-sans">
       {/* Background Lines Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 opacity-10" style={{
           backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px)`
         }} />
+      </div>
+
+      {/* Decorative icons placed unevenly */}
+      <div className="absolute inset-0 pointer-events-none">
+        <img src="/assets/icons/ic_elephant_white.png" alt="" className="hidden lg:block absolute left-8 top-12 w-20 h-20 opacity-50 transform rotate-6" />
+        <img src="/assets/icons/ic_elephant_white.png" alt="" className="hidden lg:block absolute right-29 bottom-12 w-20 h-20 opacity-50 transform rotate-6" />
+        <img src="/assets/icons/ic_bird_white.png" alt="" className="hidden lg:block absolute right-28 top-16 w-16 h-16 opacity-50 transform -rotate-12" />
+        <img src="/assets/icons/ic_tiger_white.png" alt="" className="hidden lg:block absolute left-1/6 bottom-20 w-18 h-18 opacity-40 transform rotate-3" />
+        <img src="/assets/icons/ic_bird_white.png" alt="" className="hidden lg:block absolute right-1/3 bottom-12 w-18 h-18 opacity-50 transform rotate-10" />
+        <img src="/assets/icons/ic_trunk_white.png" alt="" className="hidden lg:block absolute right-1/3 top-12 w-18 h-18 opacity-50 transform rotate-10" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

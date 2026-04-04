@@ -30,20 +30,24 @@ export default function GalleryPage() {
   }, []);
 
   return (
-    <main className="bg-gray-900 min-h-screen pt-28 pb-16">
-      <div className="container mx-auto px-6 md:px-12 lg:px-16">
+    <main className="min-h-screen pt-28 pb-16 bg-[linear-gradient(135deg,#f5f7f2_0%,#eaf4e4_45%,#dfeedd_100%)] font-sans">
+      <div className="container mx-auto px-6 md:px-26 lg:px-32">
         {/* Page Header */}
-        <div className="flex justify-between items-start mb-10 md:mb-14">
+        <div className="flex justify-between items-center mb-10 md:mb-14">
           <div>
-            <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-amber-400 mb-3">
+            <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-amber-600 mb-3">
               Gallery
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-              Our <span className="text-amber-400">Gallery</span>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-emerald-950 mb-4">
+                Gallery - Yala Wild Spirit
             </h1>
-            <p className="text-gray-400 text-sm md:text-base max-w-2xl">
+              <p className="text-gray-800 text-sm md:text-base max-w-2xl">
               Experience the breathtaking beauty of Yala through our lens. Explore the wildlife, landscapes, and unforgettable moments captured on safari.
             </p>
+          </div>
+          {/* Right: total images */}
+          <div className="hidden md:flex items-center ml-6 text-sm text-emerald-900/70">
+            <span className="font-medium">Total {uploadedImages.length} images.</span>
           </div>
         </div>
 
