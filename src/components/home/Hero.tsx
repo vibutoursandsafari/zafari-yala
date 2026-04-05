@@ -83,7 +83,7 @@ export default function Hero() {
 
         {/* Heading */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-none mb-4 whitespace-nowrap">
-          Yala wild <span className="text-amber-400">spirit</span>
+          Yala Wild <span className="text-amber-400">Spirit</span>
         </h1>
 
         {/* Sub text */}

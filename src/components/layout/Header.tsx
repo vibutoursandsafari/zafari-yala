@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { FaWhatsapp } from 'react-icons/fa';
 
 export default function Header() {
@@ -43,6 +43,22 @@ export default function Header() {
     window.addEventListener('hashchange', updateHash);
     return () => window.removeEventListener('hashchange', updateHash);
   }, []);
+
+  const router = useRouter();
+
+  const handleScroll = (e: any, id: string) => {
+    e?.preventDefault?.();
+    if (typeof window === 'undefined') {
+      router.push('/#' + id);
+      return;
+    }
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      router.push('/#' + id);
+    }
+  };
 
   const headerBg = (isOverHero && pathname === '/')
     ? 'bg-white/5 backdrop-blur-md border-white/20'
@@ -98,13 +114,22 @@ export default function Header() {
             Articles
             <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${pathname === '/articles' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
-          <Link
-            href="/#about"
+          <a
+            href="#packages"
+            onClick={(e) => handleScroll(e, 'packages')}
             className="text-white hover:text-white transition-all duration-300 relative group"
           >
-            About Us
-            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${hash === '#about' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
-          </Link>
+            Packages
+            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${hash === '#packages' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+          </a>
+          <a
+            href="#contact"
+            onClick={(e) => handleScroll(e, 'contact')}
+            className="text-white hover:text-white transition-all duration-300 relative group"
+          >
+            Contact
+            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${hash === '#contact' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+          </a>
         </nav>
 
         {/* WhatsApp Button */}

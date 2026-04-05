@@ -18,8 +18,17 @@ interface PackageProps {
 }
 
 const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPopular, accent }) => {
+  const handleGetStarted = () => {
+    const el = document.getElementById('contact');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.location.hash = '#contact';
+    }
+  };
+
   return (
-    <div className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-101 ring-2 ring-green-700 shadow-lg">
+    <div className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-101 ring-2 ring-green-700 shadow-lg flex flex-col h-full">
       {/* Popular Badge */}
       {isPopular && (
         <div className="absolute top-4 right-4 z-10 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
@@ -28,9 +37,8 @@ const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPo
         </div>
       )}
 
-      <div className="bg-white">
-        {/* Green Header Section (darker) */}
-        <div className="relative p-8 overflow-hidden bg-gradient-to-r from-green-800 to-emerald-900">
+      {/* Green Header Section (darker) */}
+      <div className="relative p-8 overflow-hidden bg-gradient-to-r from-green-800 to-emerald-900">
           {/* Decorative Dots Background (kept) */}
           <div className="absolute inset-0 opacity-25 pointer-events-none">
             <div
@@ -51,7 +59,7 @@ const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPo
               <h3 className="text-2xl font-bold text-white">{name}</h3>
             </div>
             <p className="text-white/90 text-sm mb-4 leading-relaxed">{description}</p>
-            <button className="flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 bg-white text-green-600 hover:bg-gray-100 hover:scale-105">
+            <button onClick={handleGetStarted} type="button" className="flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 bg-white text-green-600 hover:bg-gray-100 hover:scale-105">
               Get Started
               <FiArrowRight size={16} />
             </button>
@@ -59,7 +67,7 @@ const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPo
         </div>
 
         {/* Features List */}
-        <div className="p-8 space-y-4">
+        <div className="bg-white p-8 space-y-4 flex-1">
           {features.map((feature, idx) => (
             <div key={idx} className="flex items-start gap-3">
               <div className="flex-shrink-0 mt-1 text-green-600">
@@ -69,7 +77,6 @@ const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPo
             </div>
           ))}
         </div>
-      </div>
     </div>
   );
 };
@@ -77,7 +84,7 @@ const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPo
 export default function Packages() {
   const packages: PackageProps[] = [
     {
-      name: 'Safari Trail',
+      name: 'Standard Tour',
       description: 'Half day guided safari experience',
       accent: 'bg-blue-400 ring-1 ring-white/20',
       features: [
@@ -90,7 +97,7 @@ export default function Packages() {
       ],
     },
     {
-      name: 'Wildlife Explorer',
+      name: 'Premium Tour',
       description: 'Extended safari covering multiple park zones',
       isPopular: true,
       accent: 'bg-amber-400 ring-1 ring-white/20',
@@ -104,22 +111,18 @@ export default function Packages() {
       ],
     },
     {
-      name: 'Wild Expedition',
+      name: 'Customized Tour',
       description: 'Full day premium safari adventure',
       accent: 'bg-purple-600 ring-1 ring-white/20',
       features: [
-        { icon: <FiMapPin size={20} />, text: 'Explore multiple wildlife rich safari areas' },
-        { icon: <MdLocalFireDepartment size={20} />, text: 'Private luxury safari jeep experience' },
-        { icon: <MdLocalDining size={20} />, text: 'Breakfast, lunch, snacks and drinks included' },
-        { icon: <FiCheck size={20} />, text: 'Professional wildlife guide and naturalist' },
-        { icon: <FiCamera size={20} />, text: 'Premium wildlife photography stop locations' },
-        { icon: <FiCheck size={20} />, text: 'Comfortable hotel pickup and return service' },
+        { icon: <FiMapPin size={20} />, text: 'Discuss tour customized requirements' },
+        { icon: <MdLocalFireDepartment size={20} />, text: 'Customized meals, guide, pickups' },
       ],
     },
   ];
 
   return (
-    <section className="py-6 md:py-12 bg-[linear-gradient(135deg,#f5f7f2_0%,#eaf4e4_45%,#dfeedd_100%)]">
+    <section id="packages" className="py-6 md:py-12 bg-[linear-gradient(135deg,#f5f7f2_0%,#eaf4e4_45%,#dfeedd_100%)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-12">
