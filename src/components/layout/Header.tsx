@@ -2,52 +2,56 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { type MouseEvent, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { FaWhatsapp } from 'react-icons/fa';
 
 export default function Header() {
   // Header color only transparent when over hero section
   const [isOverHero, setIsOverHero] = useState(false);
-  const [hash, setHash] = useState('');
+  const [activeSection, setActiveSection] = useState('hero');
   const pathname = usePathname();
   useEffect(() => {
-    // Only observe hero on home page
+    // Track the section currently in view on the home page
     if (pathname !== '/') {
       return;
     }
 
-    const heroSection = document.getElementById('hero');
-    if (!heroSection) {
-      return;
-    }
+    const sectionIds = ['hero', 'packages', 'contact', 'reviews'];
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsOverHero(entry.isIntersecting);
-      },
-      { threshold: 0.1 }
-    );
+    const syncActiveSection = () => {
+      const headerOffset = 140;
+      const scrollPosition = window.scrollY + headerOffset;
+      let currentSection = 'hero';
 
-    observer.observe(heroSection);
+      for (const id of sectionIds) {
+        const element = document.getElementById(id);
+        if (!element) continue;
+
+        if (scrollPosition >= element.offsetTop) {
+          currentSection = id;
+        }
+      }
+
+      setActiveSection(currentSection);
+      setIsOverHero(currentSection === 'hero');
+    };
+
+    syncActiveSection();
+    window.addEventListener('scroll', syncActiveSection, { passive: true });
+    window.addEventListener('resize', syncActiveSection);
+
     return () => {
-      observer.disconnect();
-      setIsOverHero(false);
+      window.removeEventListener('scroll', syncActiveSection);
+      window.removeEventListener('resize', syncActiveSection);
     };
   }, [pathname]);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const updateHash = () => setHash(window.location.hash || '');
-    updateHash();
-    window.addEventListener('hashchange', updateHash);
-    return () => window.removeEventListener('hashchange', updateHash);
-  }, []);
-
   const router = useRouter();
 
-  const handleScroll = (e: any, id: string) => {
+  const handleScroll = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
     e?.preventDefault?.();
+    setActiveSection(id);
     if (typeof window === 'undefined') {
       router.push('/#' + id);
       return;
@@ -63,6 +67,11 @@ export default function Header() {
   const headerBg = (isOverHero && pathname === '/')
     ? 'bg-white/5 backdrop-blur-md border-white/20'
     : 'bg-[#022814]/95 backdrop-blur-sm border-[#022814]/60';
+
+  const isActiveRoute = (route: string) => pathname === route;
+  const isActiveSection = (sectionId: string) => pathname === '/' && activeSection === sectionId;
+  const navLabelClass = (active: boolean) => `group relative inline-flex pb-1 transition-colors duration-300 ${active ? 'text-amber-300' : 'text-white hover:text-amber-200'}`;
+  const navUnderlineClass = (active: boolean) => `absolute -bottom-1 left-0 h-0.5 origin-left rounded-full transition-transform duration-300 ${active ? 'scale-x-100 bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.45)]' : 'scale-x-0 bg-amber-300 group-hover:scale-x-100'}`;
 
   // Hide header on admin routes
   if (pathname?.startsWith('/admin')) {
@@ -95,40 +104,48 @@ export default function Header() {
         <nav className="hidden md:flex items-center space-x-8">
           <Link
             href="/"
-            className="text-white hover:text-white transition-all duration-300 relative group"
+            className={navLabelClass(isActiveRoute('/') || isActiveSection('hero'))}
           >
             Home
-            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${pathname === '/' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+            <span className={navUnderlineClass(isActiveRoute('/') || isActiveSection('hero'))} />
           </Link>
           <Link
             href="/gallery"
-            className="text-white hover:text-white transition-all duration-300 relative group"
+            className={navLabelClass(isActiveRoute('/gallery'))}
           >
             Gallery
-            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${pathname === '/gallery' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+            <span className={navUnderlineClass(isActiveRoute('/gallery'))} />
           </Link>
           <Link
             href="/articles"
-            className="text-white hover:text-white transition-all duration-300 relative group"
+            className={navLabelClass(isActiveRoute('/articles'))}
           >
             Articles
-            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${pathname === '/articles' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+            <span className={navUnderlineClass(isActiveRoute('/articles'))} />
           </Link>
           <a
             href="#packages"
             onClick={(e) => handleScroll(e, 'packages')}
-            className="text-white hover:text-white transition-all duration-300 relative group"
+            className={navLabelClass(isActiveSection('packages'))}
           >
             Packages
-            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${hash === '#packages' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+            <span className={navUnderlineClass(isActiveSection('packages'))} />
           </a>
           <a
             href="#contact"
             onClick={(e) => handleScroll(e, 'contact')}
-            className="text-white hover:text-white transition-all duration-300 relative group"
+            className={navLabelClass(isActiveSection('contact'))}
           >
             Contact
-            <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${hash === '#contact' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+            <span className={navUnderlineClass(isActiveSection('contact'))} />
+          </a>
+          <a
+            href="#reviews"
+            onClick={(e) => handleScroll(e, 'reviews')}
+            className={navLabelClass(isActiveSection('reviews'))}
+          >
+            Reviews
+            <span className={navUnderlineClass(isActiveSection('reviews'))} />
           </a>
         </nav>
 
