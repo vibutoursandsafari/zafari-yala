@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { FaStar } from 'react-icons/fa';
+import { FaCheckCircle, FaStar } from 'react-icons/fa';
 import { FiChevronLeft, FiChevronRight, FiMessageCircle, FiX } from 'react-icons/fi';
 import { addReview, getReviews } from '@/services/reviewService';
 import type { Review } from '@/types/review';
@@ -18,7 +18,9 @@ export default function Reviews() {
   const [hoverRating, setHoverRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [feedbackType, setFeedbackType] = useState<'success' | 'error' | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [itemsPerView, setItemsPerView] = useState(3);
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -41,31 +43,41 @@ export default function Reviews() {
     return Number((total / reviews.length).toFixed(1));
   }, [reviews]);
 
-  useEffect(() => {
-    if (reviews.length <= 1) {
-      return;
-    }
-
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % reviews.length);
-    }, 4500);
-
-    return () => clearInterval(timer);
-  }, [reviews.length]);
+  const maxSlides = Math.max(0, reviews.length - itemsPerView + 1);
 
   useEffect(() => {
-    if (currentSlide > reviews.length - 1) {
-      setCurrentSlide(0);
+    const updateItemsPerView = () => {
+      if (window.innerWidth >= 1280) {
+        setItemsPerView(4);
+      } else if (window.innerWidth >= 1024) {
+        setItemsPerView(3);
+      } else if (window.innerWidth >= 640) {
+        setItemsPerView(2);
+      } else {
+        setItemsPerView(1);
+      }
+    };
+
+    updateItemsPerView();
+    window.addEventListener('resize', updateItemsPerView);
+    return () => window.removeEventListener('resize', updateItemsPerView);
+  }, []);
+
+  useEffect(() => {
+    if (currentSlide > maxSlides) {
+      setCurrentSlide(maxSlides);
     }
-  }, [currentSlide, reviews.length]);
+  }, [currentSlide, maxSlides]);
 
   const handlePrevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + reviews.length) % reviews.length);
+    setCurrentSlide((prev) => Math.max(0, prev - 1));
   };
 
   const handleNextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % reviews.length);
+    setCurrentSlide((prev) => Math.min(maxSlides, prev + 1));
   };
+
+
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -74,14 +86,17 @@ export default function Reviews() {
     setRating(5);
     setHoverRating(0);
     setFeedback(null);
+    setFeedbackType(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFeedback(null);
+    setFeedbackType(null);
 
     if (!name.trim() || !message.trim()) {
       setFeedback('Name and review message are required.');
+      setFeedbackType('error');
       return;
     }
 
@@ -96,21 +111,27 @@ export default function Reviews() {
       const freshReviews = await getReviews();
       setReviews(freshReviews);
       setFeedback('Thanks! Your review has been published.');
+      setFeedbackType('success');
 
       setTimeout(() => {
         closeModal();
-      }, 700);
+      }, 1800);
     } catch (error) {
       console.error('Failed to submit review:', error);
       setFeedback('Failed to submit review. Please try again.');
+      setFeedbackType('error');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section id="reviews" className="bg-gradient-to-b from-white to-emerald-50/60 py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="reviews" className="relative overflow-hidden bg-[linear-gradient(135deg,#f5f7f2_0%,#eaf4e4_45%,#dfeedd_100%)] py-20">
+      {/* Decorative blurred elements */}
+      <div className="pointer-events-none absolute -left-24 top-14 h-60 w-60 rounded-full bg-emerald-300/30 blur-3xl" />
+      <div className="pointer-events-none absolute -right-16 bottom-10 h-72 w-72 rounded-full bg-lime-300/30 blur-3xl" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-700">Guest Reviews</p>
@@ -155,12 +176,16 @@ export default function Reviews() {
           <div className="rounded-2xl border border-emerald-900/10 bg-white p-5 shadow-sm sm:p-6">
             <div className="relative overflow-hidden rounded-xl">
               <div
-                className="flex transition-transform duration-500 ease-out"
-                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                className="flex gap-4 transition-transform duration-500 ease-out"
+                style={{ transform: `translateX(-${currentSlide * (100 / itemsPerView)}%)` }}
               >
                 {reviews.map((review) => (
-                  <article key={review.id} className="w-full shrink-0 px-1">
-                    <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/30 p-5">
+                  <article
+                    key={review.id}
+                    className="shrink-0"
+                    style={{ flex: `0 0 calc(${100 / itemsPerView}% - 0.75rem)` }}
+                  >
+                    <div className="rounded-2xl border border-emerald-900/10 bg-emerald-50/30 p-5 h-full">
                       <div className="mb-3 flex items-center justify-between gap-3">
                         <h3 className="truncate text-base font-bold text-emerald-950">{review.name}</h3>
                         <div className="flex items-center gap-1 text-amber-400">
@@ -172,7 +197,9 @@ export default function Reviews() {
                           ))}
                         </div>
                       </div>
-                      <p className="min-h-24 text-sm leading-relaxed text-emerald-900/80">{review.message}</p>
+                      <p className="min-h-24 break-words text-sm leading-relaxed text-emerald-900/80 line-clamp-5" title={review.message}>
+                        {review.message}
+                      </p>
                       <p className="mt-4 text-xs text-emerald-900/55">
                         {new Date(review.createdAt).toLocaleDateString('en-US', {
                           month: 'short',
@@ -191,7 +218,8 @@ export default function Reviews() {
                 <button
                   type="button"
                   onClick={handlePrevSlide}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-emerald-900/15 text-emerald-900 transition hover:bg-emerald-50"
+                  disabled={currentSlide === 0}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-emerald-900/15 text-emerald-900 transition hover:bg-emerald-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label="Previous review"
                 >
                   <FiChevronLeft />
@@ -199,23 +227,20 @@ export default function Reviews() {
                 <button
                   type="button"
                   onClick={handleNextSlide}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-emerald-900/15 text-emerald-900 transition hover:bg-emerald-50"
+                  disabled={currentSlide >= maxSlides}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-emerald-900/15 text-emerald-900 transition hover:bg-emerald-50 disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label="Next review"
                 >
                   <FiChevronRight />
                 </button>
               </div>
 
-              <div className="flex items-center gap-2">
-                {reviews.map((_, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => setCurrentSlide(index)}
-                    className={`h-2.5 rounded-full transition-all ${index === currentSlide ? 'w-7 bg-emerald-700' : 'w-2.5 bg-emerald-200 hover:bg-emerald-300'}`}
-                    aria-label={`Go to review ${index + 1}`}
-                  />
-                ))}
+              <div className="flex items-center gap-1 text-sm text-emerald-900/70">
+                <span className="font-semibold">{currentSlide + 1}</span>
+                <span>-</span>
+                <span className="font-semibold">{Math.min(currentSlide + itemsPerView, reviews.length)}</span>
+                <span>of</span>
+                <span className="font-semibold">{reviews.length}</span>
               </div>
             </div>
           </div>
@@ -240,67 +265,76 @@ export default function Reviews() {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label className="mb-1.5 block text-sm font-semibold text-emerald-900">Your Name</label>
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="block w-full rounded-xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-emerald-950 outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
-                  placeholder="Enter your name"
-                  required
-                />
+            {feedbackType === 'success' && feedback ? (
+              <div className="rounded-2xl border border-emerald-200 bg-[linear-gradient(135deg,#ecfdf5_0%,#d1fae5_100%)] p-6 text-center shadow-sm">
+                <FaCheckCircle className="mx-auto mb-3 h-12 w-12 text-emerald-600" />
+                <h4 className="text-xl font-bold text-emerald-900">Thank You!</h4>
+                <p className="mt-2 text-sm text-emerald-900/80">{feedback}</p>
+                <p className="mt-2 text-xs text-emerald-900/60">This popup will close automatically.</p>
               </div>
-
-              <div>
-                <label className="mb-1.5 block text-sm font-semibold text-emerald-900">Rating</label>
-                <div className="flex items-center gap-2">
-                  {Array.from({ length: MAX_STARS }).map((_, index) => {
-                    const starValue = index + 1;
-                    const isActive = (hoverRating || rating) >= starValue;
-                    return (
-                      <button
-                        key={index}
-                        type="button"
-                        onMouseEnter={() => setHoverRating(starValue)}
-                        onMouseLeave={() => setHoverRating(0)}
-                        onClick={() => setRating(starValue)}
-                        className="text-2xl transition hover:scale-110"
-                        aria-label={`Rate ${starValue} star${starValue > 1 ? 's' : ''}`}
-                      >
-                        <FaStar className={isActive ? 'text-amber-400' : 'text-gray-300'} />
-                      </button>
-                    );
-                  })}
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <label className="mb-1.5 block text-sm font-semibold text-emerald-900">Your Name</label>
+                  <input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="block w-full rounded-xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-emerald-950 outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+                    placeholder="Enter your name"
+                    required
+                  />
                 </div>
-              </div>
 
-              <div>
-                <label className="mb-1.5 block text-sm font-semibold text-emerald-900">Review</label>
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  rows={4}
-                  className="block w-full rounded-xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-emerald-950 outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
-                  placeholder="Describe your safari experience..."
-                  required
-                />
-              </div>
+                <div>
+                  <label className="mb-1.5 block text-sm font-semibold text-emerald-900">Rating</label>
+                  <div className="flex items-center gap-2">
+                    {Array.from({ length: MAX_STARS }).map((_, index) => {
+                      const starValue = index + 1;
+                      const isActive = (hoverRating || rating) >= starValue;
+                      return (
+                        <button
+                          key={index}
+                          type="button"
+                          onMouseEnter={() => setHoverRating(starValue)}
+                          onMouseLeave={() => setHoverRating(0)}
+                          onClick={() => setRating(starValue)}
+                          className="text-2xl transition hover:scale-110"
+                          aria-label={`Rate ${starValue} star${starValue > 1 ? 's' : ''}`}
+                        >
+                          <FaStar className={isActive ? 'text-amber-400' : 'text-gray-300'} />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
-              {feedback && (
-                <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800">
-                  {feedback}
-                </p>
-              )}
+                <div>
+                  <label className="mb-1.5 block text-sm font-semibold text-emerald-900">Review</label>
+                  <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    rows={4}
+                    className="block w-full rounded-xl border border-emerald-900/15 bg-white px-4 py-3 text-sm text-emerald-950 outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+                    placeholder="Describe your safari experience..."
+                    required
+                  />
+                </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="inline-flex w-full items-center justify-center rounded-xl bg-[linear-gradient(135deg,#0f6b3a_0%,#15803d_55%,#166534_100%)] px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_25px_-12px_rgba(15,107,58,0.8)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {isSubmitting ? 'Submitting...' : 'Submit Review'}
-              </button>
-            </form>
+                {feedbackType === 'error' && feedback && (
+                  <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
+                    {feedback}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="inline-flex w-full items-center justify-center rounded-xl bg-[linear-gradient(135deg,#0f6b3a_0%,#15803d_55%,#166534_100%)] px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_25px_-12px_rgba(15,107,58,0.8)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Review'}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       )}
