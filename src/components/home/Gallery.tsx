@@ -74,7 +74,7 @@ export default function Gallery() {
         <Image src="/assets/icons/ic_trunk_white.png" alt="decorative trunk" width={80} height={80} />
       </div>
 
-      <div className="container mx-auto px-6 md:px-16 lg:px-24 relative z-10">
+      <div className="container max-w-7xl mx-auto px-4 md:px-4 lg:px-6 relative z-10">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* Left: gallery column (header + gallery) */}
