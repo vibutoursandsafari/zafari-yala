@@ -32,6 +32,7 @@ export default function About() {
   return (
     <section
       ref={sectionRef}
+      id="about"
       className="py-20 text-center relative"
       style={{
         backgroundImage: "url('/assets/images/about_cover3.png')",
