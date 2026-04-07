@@ -17,7 +17,7 @@ export default function Header() {
       return;
     }
 
-    const sectionIds = ['hero', 'packages', 'contact', 'reviews'];
+    const sectionIds = ['hero', 'packages', 'contact', 'reviews', 'about'];
 
     const syncActiveSection = () => {
       const headerOffset = 140;
@@ -146,6 +146,14 @@ export default function Header() {
           >
             Reviews
             <span className={navUnderlineClass(isActiveSection('reviews'))} />
+          </a>
+          <a
+            href="#about"
+            onClick={(e) => handleScroll(e, 'about')}
+            className={navLabelClass(isActiveSection('about'))}
+          >
+            About
+            <span className={navUnderlineClass(isActiveSection('about'))} />
           </a>
         </nav>
 
