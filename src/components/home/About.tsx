@@ -1,21 +1,47 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { FaWhatsapp } from "react-icons/fa";
 
 export default function About() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [isInView, setIsInView] = useState(false);
+  const badgeText = "YALA WILD SPIRIT";
+
+  useEffect(() => {
+    const node = sectionRef.current;
+
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(node);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       className="py-20 text-center relative"
       style={{
-        backgroundImage: "url('/assets/images/about_cover.jpg')",
+        backgroundImage: "url('/assets/images/about_cover3.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
       }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-white/80"></div>
+      <div className="absolute inset-0 bg-white/30"></div>
 
       <div className="relative z-10 container mx-auto px-4">
         {/* Section Header */}
@@ -30,25 +56,43 @@ export default function About() {
         <div className="mt-16 grid grid-cols-1 xl:grid-cols-12 gap-10 text-left px-4 lg:px-12 items-start">
           {/* Left Side - Image Composition */}
           <div className="xl:col-span-4 relative w-full max-w-xl mx-auto xl:mx-0 pb-10 sm:pb-12">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white h-[340px] sm:h-[400px]">
+            <div className="relative group rounded-3xl overflow-hidden shadow-2xl h-[340px] sm:h-[400px] cursor-pointer">
               <Image
                 src="/assets/images/about_1.jpg"
                 alt="Safari jeep experience in Yala"
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
                 priority={false}
               />
             </div>
-            <div className="absolute -bottom-6 -right-2 sm:-right-6 w-44 sm:w-52 h-56 sm:h-64 rounded-2xl overflow-hidden border-4 border-white shadow-xl bg-white">
+            <div className="absolute group -bottom-6 -right-2 sm:-right-6 w-44 sm:w-52 h-56 sm:h-64 rounded-2xl overflow-hidden shadow-xl cursor-pointer">
               <Image
                 src="/assets/images/about_2.jpg"
                 alt="Wildlife close-up at Yala"
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
               />
             </div>
             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-md">
-              <p className="text-xs sm:text-sm font-semibold text-teal-700 tracking-wide">YALA WILD SPIRIT</p>
+              <p className="text-xs sm:text-sm font-semibold text-teal-700 tracking-wide whitespace-nowrap">
+                {badgeText.split("").map((char, index) => (
+                  <span
+                    key={`${char}-${index}`}
+                    className="inline-block"
+                    style={{
+                      opacity: 0,
+                      transform: "translateX(-16px)",
+                      animationName: isInView ? "badge-letter-slide" : "none",
+                      animationDuration: isInView ? "0.45s" : "0s",
+                      animationTimingFunction: "ease-out",
+                      animationFillMode: "forwards",
+                      animationDelay: isInView ? `${index * 0.045}s` : "0s",
+                    }}
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </span>
+                ))}
+              </p>
             </div>
           </div>
 
@@ -57,9 +101,10 @@ export default function About() {
             <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
               Planning your next wildlife adventure?
             </h3>
-            <p className="text-gray-600 leading-relaxed text-base">
+            <p className="text-gray-600 leading-relaxed text-base mb-6">
               At Yala Wild Spirit, we specialize in delivering refined and unforgettable wildlife experiences in Yala, Sri Lanka.
             </p>
+          
             <p className="text-gray-600 leading-relaxed mb-6 text-base">
               With over 3 years of expertise, we combine professional guidance, personalized service, and premium comfort to create safari journeys that are both thrilling and elegant. Our passion is to turn every adventure into a timeless memory.
             </p>
@@ -99,6 +144,19 @@ export default function About() {
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes badge-letter-slide {
+          from {
+            opacity: 0;
+            transform: translateX(-16px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+      `}</style>
     </section>
   );
 }
