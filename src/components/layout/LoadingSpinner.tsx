@@ -5,7 +5,7 @@ import React from "react";
 export default function LoadingSpinner({ fullScreen = true }: { fullScreen?: boolean }) {
   const video = (
     <video
-      src="assets/webm/bird_loading_blue.webm"
+      src="assets/webm/rabbit_loading.webm"
       autoPlay
       loop
       muted

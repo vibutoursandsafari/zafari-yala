@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { FiCheck, FiStar, FiArrowRight, FiCamera, FiMapPin, FiUsers } from 'react-icons/fi';
 import { MdLocalDining, MdLocalFireDepartment } from 'react-icons/md';
 import Image from 'next/image';
@@ -15,9 +16,10 @@ interface PackageProps {
   features: PackageFeature[];
   isPopular?: boolean;
   accent?: string;
+  className?: string;
 }
 
-const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPopular, accent }) => {
+const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPopular, accent, className }) => {
   const handleGetStarted = () => {
     const el = document.getElementById('contact');
     if (el) {
@@ -28,7 +30,7 @@ const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPo
   };
 
   return (
-    <div className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-101 ring-2 ring-green-700 shadow-lg flex flex-col h-full">
+    <div className={`relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-101 ring-2 ring-green-700 shadow-lg flex flex-col h-full ${className ?? ''}`}>
       {/* Popular Badge */}
       {isPopular && (
         <div className="absolute top-4 right-4 z-10 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
@@ -121,6 +123,43 @@ export default function Packages() {
     },
   ];
 
+  const [visible, setVisible] = useState<boolean[]>(() => packages.map(() => false));
+  const refs = useRef<Array<HTMLDivElement | null>>([]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const timersRef = { current: [] as number[] } as { current: number[] };
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const idxAttr = (entry.target as HTMLElement).dataset.index;
+          const idx = idxAttr ? Number(idxAttr) : -1;
+          if (idx >= 0) {
+            const t = window.setTimeout(() => {
+              setVisible((v) => {
+                if (v[idx]) return v;
+                const copy = [...v];
+                copy[idx] = true;
+                return copy;
+              });
+            }, idx * 120);
+            timersRef.current.push(t);
+          }
+          obs.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    refs.current.forEach((el) => el && obs.observe(el));
+    return () => {
+      obs.disconnect();
+      timersRef.current.forEach((t) => clearTimeout(t));
+      timersRef.current = [];
+    };
+  }, []);
+
   return (
     <section id="packages" className="py-6 md:py-12 bg-[linear-gradient(135deg,#f5f7f2_0%,#eaf4e4_45%,#dfeedd_100%)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -135,7 +174,17 @@ export default function Packages() {
         {/* Packages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {packages.map((pkg, idx) => (
-            <PackageCard key={idx} {...pkg} />
+            <div
+              key={idx}
+              ref={(el) => { refs.current[idx] = el; }}
+              data-index={idx}
+              className="will-change-transform"
+            >
+              <PackageCard
+                {...pkg}
+                className={`transform transition-all duration-500 ${visible[idx] ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-95'}`}
+              />
+            </div>
           ))}
         </div>
       </div>
