@@ -1,8 +1,9 @@
 ﻿'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { FiCheck, FiStar, FiArrowRight, FiCamera, FiMapPin, FiUsers } from 'react-icons/fi';
-import { MdLocalDining, MdLocalFireDepartment } from 'react-icons/md';
+import { FiCheck, FiStar, FiArrowRight, FiMapPin } from 'react-icons/fi';
+import { MdLocalFireDepartment } from 'react-icons/md';
+import { FaWhatsapp } from 'react-icons/fa';
 import Image from 'next/image';
 
 interface PackageFeature {
@@ -30,7 +31,7 @@ const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPo
   };
 
   return (
-    <div className={`relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-101 ring-2 ring-green-700 shadow-lg flex flex-col h-full ${className ?? ''}`}>
+    <div className={`group relative rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-101 ring-2 ring-green-700 shadow-lg flex flex-col h-full ${className ?? ''}`}>
       {/* Popular Badge */}
       {isPopular && (
         <div className="absolute top-4 right-4 z-10 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
@@ -79,6 +80,24 @@ const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPo
             </div>
           ))}
         </div>
+
+        {/* Hover contact popup */}
+        <div className="pointer-events-none absolute inset-0 z-20 bg-black/35 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100" />
+        <div className="pointer-events-none absolute inset-x-4 bottom-4 z-30 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
+          <div className="rounded-xl border border-white/40 bg-white/95 px-4 py-3 text-center shadow-2xl backdrop-blur-sm">
+            <p className="text-sm font-semibold text-gray-800">Contact for more details</p>
+            <a
+              href="https://wa.me/94763272593"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pointer-events-auto mt-2 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:brightness-95"
+              aria-label="Contact on WhatsApp +94 76 327 2593"
+            >
+              <FaWhatsapp className="text-base" />
+              +94 76 327 2593
+            </a>
+          </div>
+        </div>
     </div>
   );
 };
@@ -86,35 +105,29 @@ const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPo
 export default function Packages() {
   const packages: PackageProps[] = [
     {
-      name: 'Standard Tour',
-      description: 'Half day guided safari experience',
+      name: 'Half Safari',
+      description: 'Quick Yala safari with great sightings',
       accent: 'bg-blue-400 ring-1 ring-white/20',
       features: [
-        { icon: <FiMapPin size={20} />, text: 'Visit one main safari area' },
-        { icon: <FiUsers size={20} />, text: 'Shared safari jeep with driver' },
-        { icon: <MdLocalDining size={20} />, text: 'Complimentary bottled drinking water' },
+       
         { icon: <FiCheck size={20} />, text: 'Basic wildlife briefing before tour' },
         { icon: <FiCheck size={20} />, text: 'National park entry permit included' },
-        { icon: <FiCamera size={20} />, text: 'Short stops for wildlife photography' },
+        
       ],
     },
     {
-      name: 'Premium Tour',
-      description: 'Extended safari covering multiple park zones',
+      name: 'Full Safari',
+      description: 'Complete, immersive Yala wildlife adventure',
       isPopular: true,
       accent: 'bg-amber-400 ring-1 ring-white/20',
       features: [
-        { icon: <FiUsers size={20} />, text: 'Small group safari jeep experience' },
-        { icon: <MdLocalDining size={20} />, text: 'Light meal or packed breakfast included' },
-        { icon: <MdLocalDining size={20} />, text: 'Complimentary water and light refreshments' },
-        { icon: <FiCheck size={20} />, text: 'Experienced wildlife guide during safari' },
-        { icon: <FiCamera size={20} />, text: 'Scenic wildlife observation and photo stops' },
-        { icon: <FiCheck size={20} />, text: 'Hotel pickup and drop off service' },
+         { icon: <FiCheck size={20} />, text: 'Basic wildlife briefing before tour' },
+         { icon: <FiCheck size={20} />, text: 'National park entry permit included' },
       ],
     },
     {
       name: 'Customized Tour',
-      description: 'Full day premium safari adventure',
+      description: 'Tailored Yala safari to your preference',
       accent: 'bg-purple-600 ring-1 ring-white/20',
       features: [
         { icon: <FiMapPin size={20} />, text: 'Discuss tour customized requirements' },

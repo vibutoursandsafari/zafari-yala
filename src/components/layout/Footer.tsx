@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import type { MouseEvent } from 'react';
 import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import { FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
 
@@ -10,7 +11,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
   const router = useRouter();
 
-  const handleScroll = (e: any, id: string) => {
+  const handleScroll = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
     e?.preventDefault?.();
     if (typeof window === 'undefined') {
       router.push('/#' + id);
@@ -86,6 +87,12 @@ export default function Footer() {
               <li>
                 <a href="#contact" onClick={(e) => handleScroll(e, 'contact')} className="hover:text-white">Contact</a>
               </li>
+              <li>
+                <a href="#reviews" onClick={(e) => handleScroll(e, 'reviews')} className="hover:text-white">Reviews</a>
+              </li>
+              <li>
+                <a href="#about" onClick={(e) => handleScroll(e, 'about')} className="hover:text-white">About</a>
+              </li>
             </ul>
           </div>
 
@@ -94,10 +101,10 @@ export default function Footer() {
             <h4 className="text-sm font-semibold text-emerald-100 mb-3">Packages</h4>
             <ul className="space-y-2 text-sm text-emerald-200">
               <li>
-                <a href="#packages" onClick={(e) => handleScroll(e, 'packages')} className="hover:text-white">Standard Tour</a>
+                <a href="#packages" onClick={(e) => handleScroll(e, 'packages')} className="hover:text-white">Half Safari</a>
               </li>
               <li>
-                <a href="#packages" onClick={(e) => handleScroll(e, 'packages')} className="hover:text-white">Premium Tour</a>
+                <a href="#packages" onClick={(e) => handleScroll(e, 'packages')} className="hover:text-white">Full Safari</a>
               </li>
               <li>
                 <a href="#packages" onClick={(e) => handleScroll(e, 'packages')} className="hover:text-white">Customized Tour</a>
