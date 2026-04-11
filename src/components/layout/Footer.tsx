@@ -101,13 +101,13 @@ export default function Footer() {
             <h4 className="text-sm font-semibold text-emerald-100 mb-3">Packages</h4>
             <ul className="space-y-2 text-sm text-emerald-200">
               <li>
-                <a href="#packages" onClick={(e) => handleScroll(e, 'packages')} className="hover:text-white">Half Safari</a>
+                <a href="#packages" onClick={(e) => handleScroll(e, 'packages')} className="hover:text-white">Half Day Safari</a>
               </li>
               <li>
-                <a href="#packages" onClick={(e) => handleScroll(e, 'packages')} className="hover:text-white">Full Safari</a>
+                <a href="#packages" onClick={(e) => handleScroll(e, 'packages')} className="hover:text-white">Full Day Safari</a>
               </li>
               <li>
-                <a href="#packages" onClick={(e) => handleScroll(e, 'packages')} className="hover:text-white">Customized Tour</a>
+                <a href="#packages" onClick={(e) => handleScroll(e, 'packages')} className="hover:text-white">Customized Safari</a>
               </li>
             </ul>
           </div>
