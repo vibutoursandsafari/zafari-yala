@@ -1,9 +1,8 @@
 ﻿'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { FiCheck, FiStar, FiArrowRight, FiMapPin } from 'react-icons/fi';
-import { MdLocalFireDepartment } from 'react-icons/md';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FiCheck, FiStar, FiArrowRight } from 'react-icons/fi';
+import { FaWhatsapp, FaPaw } from 'react-icons/fa';
 import Image from 'next/image';
 
 interface PackageFeature {
@@ -126,12 +125,11 @@ export default function Packages() {
       ],
     },
     {
-      name: 'Customized Safari',
+      name: 'Customized Tour',
       description: 'Tailored Yala safari to your preference',
       accent: 'bg-purple-600 ring-1 ring-white/20',
       features: [
-        { icon: <FiMapPin size={20} />, text: 'Discuss tour customized requirements' },
-        { icon: <MdLocalFireDepartment size={20} />, text: 'Customized meals, guide, pickups' },
+        { icon: <FaPaw size={19} />, text: 'Customize your safari with leopard tracking and a naturalist' },
       ],
     },
   ];
