@@ -105,7 +105,7 @@ const PackageCard: React.FC<PackageProps> = ({ name, description, features, isPo
 export default function Packages() {
   const packages: PackageProps[] = [
     {
-      name: 'Half Safari',
+      name: 'Half Day Safari',
       description: 'Quick Yala safari with great sightings',
       accent: 'bg-blue-400 ring-1 ring-white/20',
       features: [
@@ -116,7 +116,7 @@ export default function Packages() {
       ],
     },
     {
-      name: 'Full Safari',
+      name: 'Full Day Safari',
       description: 'Complete, immersive Yala wildlife adventure',
       isPopular: true,
       accent: 'bg-amber-400 ring-1 ring-white/20',
@@ -126,7 +126,7 @@ export default function Packages() {
       ],
     },
     {
-      name: 'Customized Tour',
+      name: 'Customized Safari',
       description: 'Tailored Yala safari to your preference',
       accent: 'bg-purple-600 ring-1 ring-white/20',
       features: [

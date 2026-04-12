@@ -152,7 +152,7 @@ export default function Hero() {
           </div>
           {/* Guide details */}
           <div className="flex flex-col gap-2">
-            <p className="font-bold text-white text-lg">Ravindu Vibushana Abrew</p>
+            <p className="font-bold text-white text-lg">Vibushana Abrew</p>
               <div className="flex items-center gap-2 text-gray-300 text-sm">
               <MdOutlineWorkHistory className="w-4 h-4 text-amber-400" />
               <span>3 years experience</span>
