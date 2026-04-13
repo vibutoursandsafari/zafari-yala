@@ -21,8 +21,31 @@ const dancingScript = Dancing_Script({
 });
 
 export const metadata: Metadata = {
-  title: "Zafari Yala - Experience the Wild",
-  description: "Modern tourism website for Yala safari experiences",
+  metadataBase: new URL("https://yalawildspirit.com"),
+  title: "Yala Wild Spirit - Yala Safari & Tours",
+  description: "Yala Safari & Tours in Sri Lanka with Yala Wild Spirit. (Vibushana Yala)",
+  keywords: ["yala wild spirit", "yala safari", "yala safari tours", "sri lanka safari", "yala national park", "yala tours", "yala jeep safari", "yala tour packages"],
+  authors: [
+    {
+      name: "Yala Wild Spirit",
+      url: "https://yalawildspirit.com",
+    },
+  ],
+  creator: "Vibushana Yala",
+  openGraph: {
+    title: "Yala Wild Spirit - Yala Safari & Tours",
+    description: "Yala Safari & Tours in Sri Lanka with Yala Wild Spirit. (Vibushana Yala)",
+    url: "https://yalawildspirit.com",
+    siteName: "Yala Wild Spirit",
+    images: ["/assets/images/about1.jpg"],
+    type: "website",
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Yala Wild Spirit - Yala Safari & Tours',
+    description: 'Yala Safari & Tours in Sri Lanka with Yala Wild Spirit. (Vibushana Yala)',
+    images: ['/assets/images/about1.jpg'],
+  },
 };
 
 export default function RootLayout({
