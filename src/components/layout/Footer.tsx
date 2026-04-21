@@ -59,7 +59,7 @@ export default function Footer() {
               <a className="w-9 h-9 rounded-md border border-white/20 flex items-center justify-center hover:bg-white/10" href="https://facebook.com/zafariyala" aria-label="facebook">
                 <FaFacebookF />
               </a>
-              <a className="w-9 h-9 rounded-md border border-white/20 flex items-center justify-center hover:bg-white/10" href="https://instagram.com/zafariyala" aria-label="instagram">
+              <a className="w-9 h-9 rounded-md border border-white/20 flex items-center justify-center hover:bg-white/10" href="https://www.instagram.com/yalawildspirit?igsh=Y3EyenBhY21ucWt6" aria-label="instagram">
                 <FaInstagram />
               </a>
               <a className="w-9 h-9 rounded-md border border-white/20 flex items-center justify-center hover:bg-white/10" href="https://wa.me/94763272593" aria-label="whatsapp">

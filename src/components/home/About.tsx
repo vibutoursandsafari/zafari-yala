@@ -46,7 +46,7 @@ export default function About() {
 
       <div className="relative z-10 container mx-auto px-4">
         {/* Section Header */}
-        <p className="text-teal-600 font-dancing text-2xl mb-2">
+        <p className="text-emerald-700 font-semibold text-2xl md:text-3xl tracking-wide mb-2">
           Create an Unforgettable Safari Experience
         </p>
         <h2 className="text-4xl font-bold mb-12 text-gray-800">

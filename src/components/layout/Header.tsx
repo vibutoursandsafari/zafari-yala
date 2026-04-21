@@ -17,19 +17,21 @@ export default function Header() {
       return;
     }
 
-    const sectionIds = ['hero', 'packages', 'contact', 'reviews', 'about'];
+    const sectionIds = ['hero', 'about', 'packages', 'reviews', 'contact'];
 
     const syncActiveSection = () => {
       const headerOffset = 140;
       const scrollPosition = window.scrollY + headerOffset;
       let currentSection = 'hero';
 
-      for (const id of sectionIds) {
-        const element = document.getElementById(id);
-        if (!element) continue;
+      const orderedSections = sectionIds
+        .map((id) => document.getElementById(id))
+        .filter((element): element is HTMLElement => Boolean(element))
+        .sort((a, b) => a.offsetTop - b.offsetTop);
 
+      for (const element of orderedSections) {
         if (scrollPosition >= element.offsetTop) {
-          currentSection = id;
+          currentSection = element.id;
         }
       }
 
