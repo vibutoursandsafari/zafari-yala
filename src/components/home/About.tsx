@@ -54,7 +54,7 @@ export default function About() {
         </h2>
 
         {/* About Content Section */}
-        <div className="mt-16 grid grid-cols-1 xl:grid-cols-12 gap-10 text-left px-4 lg:px-12 items-start">
+        <div className="mt-16 grid grid-cols-1 xl:grid-cols-9 gap-10 text-left px-4 lg:px-12 items-start">
           {/* Left Side - Image Composition */}
           <div className="xl:col-span-4 relative w-full max-w-xl mx-auto xl:mx-0 pb-10 sm:pb-12">
             <div className="relative group rounded-3xl overflow-hidden shadow-2xl h-[340px] sm:h-[400px] cursor-pointer">
@@ -75,7 +75,7 @@ export default function About() {
               />
             </div>
             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-md">
-              <p className="text-xs sm:text-sm font-semibold text-teal-700 tracking-wide whitespace-nowrap">
+              <p className="text-xs sm:text-sm font-semibold text-emerald-700 tracking-wide whitespace-nowrap">
                 {badgeText.split("").map((char, index) => (
                   <span
                     key={`${char}-${index}`}
@@ -95,6 +95,15 @@ export default function About() {
                 ))}
               </p>
             </div>
+            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-2 rounded-full shadow-md">
+              <Image
+                src="/assets/images/logo_yala_wild_spirit.png"
+                alt="Yala Wild Spirit logo"
+                width={28}
+                height={28}
+                className="h-7 w-7 object-contain"
+              />
+            </div>
           </div>
 
           {/* Middle - Content */}
@@ -102,47 +111,39 @@ export default function About() {
             <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
               Planning your next wildlife adventure?
             </h3>
-            <p className="text-gray-600 leading-relaxed text-base mb-6">
-              At Yala Wild Spirit, we specialize in delivering refined and unforgettable wildlife experiences in Yala, Sri Lanka.
-            </p>
-          
-            <p className="text-gray-600 leading-relaxed mb-6 text-base">
-              With over 3 years of expertise, we combine professional guidance, personalized service, and premium comfort to create safari journeys that are both thrilling and elegant. Our passion is to turn every adventure into a timeless memory.
-            </p>
-            <p className="text-gray-600 leading-relaxed mb-6 text-base italic border-l-4 border-teal-600 pl-4">
-              &ldquo;Get in touch with us and enjoy an incredible safari journey in Yala, Sri Lanka.
-              We&apos;ll help you create unforgettable memories that last a lifetime.&rdquo;
-            </p>
-            <p className="text-gray-800 font-semibold">
-              — Yala Wild Spirit Team
-            </p>
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 text-gray-600 text-base leading-relaxed">
+              <p>Enjoy a simple, safe, and memorable Yala safari with local guidance.</p>
+              <p>Quick WhatsApp booking and personalized tour support.</p>
+            </div>
 
-          {/* Right Side - Experience Badge */}
-          <div className="xl:col-span-3 flex flex-col items-start xl:items-end">
-            <div className="relative bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg">
-              <div className="text-center">
-                <div className="flex items-baseline gap-3 justify-center">
-                  <span className="text-7xl md:text-8xl font-bold text-amber-600 leading-none">3</span>
-                  <div className="text-left">
-                    <span className="text-xl md:text-2xl font-semibold text-gray-800 block">years</span>
-                    <span className="text-gray-600 text-sm">Service in</span>
-                    <span className="text-gray-800 font-bold block text-lg">YALA Safari</span>
-                  </div>
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+              <div>
+                <div className="flex items-end gap-3">
+                  <span className="text-6xl font-bold text-yellow-600 leading-none">3</span>
+                  <span className="text-lg font-semibold text-gray-800 pb-1">years</span>
                 </div>
-                
-                <a
-                  href="https://wa.me/94763272593"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-8 inline-flex items-center gap-2 bg-[#E07B67] hover:bg-[#d06a56] text-white px-10 py-4 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-                >
-                  <FaWhatsapp className="text-xl" />
-                  BOOK NOW
-                </a>
+                <p className="mt-2 text-xl font-medium text-gray-700 leading-snug">Service in<br />Yala Safari</p>
+              </div>
+
+              <div className="md:text-left">
+                <p className="text-gray-700 italic text-lg leading-relaxed">
+                  “Tell us your dates and we&apos;ll handle the rest.”
+                </p>
+                <div className="mt-5">
+                  <a
+                    href="https://wa.me/94763272593"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg w-full sm:w-auto"
+                  >
+                    <FaWhatsapp className="text-lg" />
+                    BOOK NOW
+                  </a>
+                </div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
 
