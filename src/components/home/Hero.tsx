@@ -88,7 +88,7 @@ export default function Hero() {
 
         {/* Sub text */}
         <p className="text-sm sm:text-base text-gray-300 max-w-xs sm:max-w-sm mb-6 leading-relaxed">
-          Explore the unseen beauty of Yala National Park with Zafari Tours, where every journey takes you deeper.
+          Explore the unseen beauty of Yala National Park with Yala Wild Spirit, where every journey takes you deeper.
         </p>
 
         {/* Customer review */}
@@ -125,7 +125,7 @@ export default function Hero() {
             <FaFacebookF className="w-4 h-4" />
           </a>
           <a
-            href="https://instagram.com/"
+            href="https://www.instagram.com/yalawildspirit?igsh=Y3EyenBhY21ucWt6"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm text-white hover:bg-pink-500 hover:border-pink-500 transition-all duration-300 hover:scale-110"

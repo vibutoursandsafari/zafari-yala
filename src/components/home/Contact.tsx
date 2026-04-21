@@ -128,7 +128,7 @@ export default function Contact() {
                   </a>
 
                   <a
-                    href="https://instagram.com/zafariyala"
+                    href="https://www.instagram.com/yalawildspirit?igsh=Y3EyenBhY21ucWt6"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-xl hover:border-[#034d27] hover:bg-gray-50 transition-all group"

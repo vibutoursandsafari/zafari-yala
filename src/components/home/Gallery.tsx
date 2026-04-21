@@ -169,15 +169,15 @@ export default function Gallery() {
           <aside className="space-y-6 h-full">
             {/* Right header */}
             <div className="mb-4 md:mb-6 font-sans">
-              <div className="flex flex-row items-center justify-between gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-amber-400 mb-1">
                     Readings
                   </span>
-                  <h3 className="text-xl sm:text-2xl md:text-4xl font-bold text-white mb-1 truncate">Articles</h3>
+                  <h3 className="text-xl sm:text-2xl md:text-4xl font-bold text-white mb-1 break-words sm:truncate">Articles</h3>
                 </div>
 
-                <div className="ml-4">
+                <div className="sm:ml-4 self-start sm:self-auto">
                   <Link href="/articles" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 bg-transparent text-gray-200 font-semibold text-sm md:px-4 md:py-2 md:text-base hover:bg-white/5">
                     <span>Read All</span>
                     <FiArrowRight className="w-4 h-4 md:w-5 md:h-5" />
@@ -196,21 +196,21 @@ export default function Gallery() {
                 {articles.map((a, idx) => (
                   <Link key={a.id} href={`/articles/${a.id}${a.slug ? '/' + a.slug : ''}`} className="block">
                     <article style={{ flex: idx === 0 ? 2 : 1 }} className="bg-white rounded-xl p-1 shadow transition-shadow duration-300 group overflow-hidden h-full">
-                      <div className="flex gap-2 h-full">
-                        <div className="w-28 md:w-32 h-full rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 relative">
+                      <div className="flex flex-col sm:flex-row gap-2 h-full">
+                        <div className="w-full sm:w-28 md:w-32 h-44 sm:h-full rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 relative">
                           <Image src={(a.images && a.images[0]) ? a.images[0].url : '/assets/images/about1.jpg'} alt={a.title} fill className="object-cover transition-transform duration-300 group-hover:scale-105 group-hover:brightness-105" />
                         </div>
-                        <div className="flex-1 flex flex-col py-2 px-4">
-                          <h4 className="text-base md:text-lg font-bold text-gray-900 leading-tight mb-1">{a.title}</h4>
-                          <p className="text-justify text-sm md:text-sm text-gray-600 mt-0 mb-3 overflow-hidden" style={{ WebkitLineClamp: idx === 0 ? 6 : 3, display: '-webkit-box', WebkitBoxOrient: 'vertical' }}>
+                        <div className="flex-1 flex flex-col py-2 px-3 sm:px-4 min-w-0">
+                          <h4 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 leading-tight mb-1 break-words">{a.title}</h4>
+                          <p className="text-left sm:text-justify text-sm md:text-sm text-gray-600 mt-0 mb-3 overflow-hidden break-words" style={{ WebkitLineClamp: idx === 0 ? 6 : 3, display: '-webkit-box', WebkitBoxOrient: 'vertical' }}>
                             {a.content ? (idx === 0 ? (a.content.slice(0, 400) + (a.content.length > 400 ? '...' : '')) : (a.content.slice(0, 150) + (a.content.length > 150 ? '...' : ''))) : ''}
                           </p>
-                          <div className="mt-auto flex items-center justify-between gap-3 pr-4">
-                            <div className="flex items-center gap-3">
+                          <div className="mt-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 pr-0 sm:pr-4 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
                               <span className="text-xs bg-[#013a1d] text-white px-2 py-0.5 rounded-md">{a.category}</span>
                               <span className="text-xs text-gray-500">{new Date(typeof a.created_at === 'string' ? a.created_at : a.created_at.toISOString()).toLocaleDateString()}</span>
                             </div>
-                            <div className="flex items-center gap-2 text-gray-700 text-sm font-semibold">
+                            <div className="flex items-center gap-2 text-gray-700 text-sm font-semibold self-start sm:self-auto">
                               <span>Read</span>
                               <FiArrowRight className="w-4 h-4" />
                             </div>
