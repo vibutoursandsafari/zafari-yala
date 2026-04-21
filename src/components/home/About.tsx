@@ -50,7 +50,8 @@ export default function About() {
           Create an Unforgettable Safari Experience
         </p>
         <h2 className="text-4xl font-bold mb-12 text-gray-800">
-          The Finest Safari Adventure with Yala Wild Spirit
+          The Finest Safari Adventure with{' '}
+          <span className="text-amber-400">Yala Wild Spirit</span>
         </h2>
 
         {/* About Content Section */}
@@ -95,15 +96,6 @@ export default function About() {
                 ))}
               </p>
             </div>
-            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-2 rounded-full shadow-md">
-              <Image
-                src="/assets/images/logo_yala_wild_spirit.png"
-                alt="Yala Wild Spirit logo"
-                width={28}
-                height={28}
-                className="h-7 w-7 object-contain"
-              />
-            </div>
           </div>
 
           {/* Middle - Content */}
@@ -119,7 +111,7 @@ export default function About() {
             <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
               <div>
                 <div className="flex items-end gap-3">
-                  <span className="text-6xl font-bold text-yellow-600 leading-none">3</span>
+                  <span className="text-6xl font-bold text-amber-400 leading-none">3</span>
                   <span className="text-lg font-semibold text-gray-800 pb-1">years</span>
                 </div>
                 <p className="mt-2 text-xl font-medium text-gray-700 leading-snug">Service in<br />Yala Safari</p>
@@ -158,6 +150,7 @@ export default function About() {
             transform: translateX(0);
           }
         }
+
       `}</style>
     </section>
   );
