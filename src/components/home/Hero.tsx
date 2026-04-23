@@ -15,6 +15,7 @@ const bgImages = [
 export default function Hero() {
   const [current, setCurrent] = useState(0);
   const [latestReview, setLatestReview] = useState<Review | null>(null);
+  const [titleVisible, setTitleVisible] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -38,8 +39,13 @@ export default function Hero() {
     loadLatestReview();
   }, []);
 
+  useEffect(() => {
+    const raf = window.requestAnimationFrame(() => setTitleVisible(true));
+    return () => window.cancelAnimationFrame(raf);
+  }, []);
+
   return (
-    <section id="hero" className="relative h-screen min-h-[600px] flex flex-col text-white overflow-hidden">
+    <section id="hero" className="relative min-h-[600px] md:h-screen flex flex-col text-white overflow-hidden">
       {/* Background slideshow with crossfade */}
       {bgImages.map((src, i) => (
         <div
@@ -82,8 +88,28 @@ export default function Hero() {
         </span>
 
         {/* Heading */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-none mb-4 whitespace-nowrap">
-          Yala Wild <span className="text-amber-400">Spirit</span>
+        <h1 className="mb-4 flex flex-wrap items-end gap-x-4 gap-y-1 text-4xl font-extrabold leading-none sm:text-5xl md:text-6xl lg:text-7xl">
+          <span
+            className={`block transition-all duration-700 ease-out ${
+              titleVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}
+          >
+            Yala
+          </span>
+          <span
+            className={`block transition-all duration-700 ease-out delay-150 ${
+              titleVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}
+          >
+            Wild
+          </span>
+          <span
+            className={`block text-amber-400 transition-all duration-700 ease-out delay-300 ${
+              titleVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}
+          >
+            Spirit
+          </span>
         </h1>
 
         {/* Sub text */}
@@ -140,7 +166,11 @@ export default function Hero() {
       <div className="relative z-20 px-8 md:px-16 lg:px-24 pb-10 flex flex-col sm:flex-row items-center justify-center gap-4">
 
         {/* Tour Guide Card (wider on larger screens) */}
-        <div className="flex items-center gap-6 bg-white/10 border border-white/20 backdrop-blur-md rounded-2xl px-6 py-5 w-full sm:max-w-md hover:bg-white/20 transition-all duration-300">
+        <div
+          className={`flex items-center gap-6 bg-white/10 border border-white/20 backdrop-blur-md rounded-2xl px-6 py-5 w-full sm:max-w-md hover:bg-white/20 transition-all duration-700 ease-out ${
+            titleVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+          }`}
+        >
           {/* Guide avatar */}
           <div className="relative w-20 h-20 rounded-full overflow-hidden ring-2 ring-amber-400 shrink-0">
             <Image
@@ -165,7 +195,11 @@ export default function Hero() {
           </div>
 
         {/* Video Tour Card (narrower, but same height as guide) */}
-        <div className="flex items-center gap-6 bg-white/10 border border-white/20 backdrop-blur-md rounded-2xl px-6 py-5 w-full sm:max-w-xs cursor-pointer hover:bg-white/20 transition-all duration-300 group">
+        <div
+          className={`flex items-center gap-6 bg-white/10 border border-white/20 backdrop-blur-md rounded-2xl px-6 py-5 w-full sm:max-w-xs cursor-pointer hover:bg-white/20 transition-all duration-700 ease-out delay-200 group ${
+            titleVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+          }`}
+        >
           {/* Play button (match guide avatar size) */}
           <div className="flex items-center justify-center w-16 h-16 rounded-full bg-amber-400 group-hover:bg-amber-500 transition-all duration-300 group-hover:scale-110 shrink-0 shadow-lg shadow-amber-400/40">
             <FaPlay className="w-6 h-6 text-white" />

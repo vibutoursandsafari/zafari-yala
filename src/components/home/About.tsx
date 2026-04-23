@@ -57,7 +57,11 @@ export default function About() {
         {/* About Content Section */}
         <div className="mt-16 grid grid-cols-1 xl:grid-cols-9 gap-10 text-left px-4 lg:px-12 items-start">
           {/* Left Side - Image Composition */}
-          <div className="xl:col-span-4 relative w-full max-w-xl mx-auto xl:mx-0 pb-10 sm:pb-12">
+          <div
+            className={`xl:col-span-4 relative w-full max-w-xl mx-auto xl:mx-0 pb-10 sm:pb-12 transition-all duration-700 ease-out ${
+              isInView ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+            }`}
+          >
             <div className="relative group rounded-3xl overflow-hidden shadow-2xl h-[340px] sm:h-[400px] cursor-pointer">
               <Image
                 src="/assets/images/about_1.jpg"
@@ -99,16 +103,32 @@ export default function About() {
           </div>
 
           {/* Middle - Content */}
-          <div className="xl:col-span-5 max-w-2xl">
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
+          <div
+            className={`xl:col-span-5 max-w-2xl transition-all duration-700 ease-out delay-150 ${
+              isInView ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+            }`}
+          >
+            <h3
+              className={`text-2xl md:text-3xl font-bold text-gray-800 mb-6 transition-all duration-700 ease-out delay-200 ${
+                isInView ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"
+              }`}
+            >
               Planning your next wildlife adventure?
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 text-gray-600 text-base leading-relaxed">
+            <div
+              className={`grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 text-gray-600 text-base leading-relaxed transition-all duration-700 ease-out delay-300 ${
+                isInView ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+              }`}
+            >
               <p>Enjoy a simple, safe, and memorable Yala safari with local guidance.</p>
               <p>Quick WhatsApp booking and personalized tour support.</p>
             </div>
 
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+            <div
+              className={`mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-end transition-all duration-700 ease-out delay-[380ms] ${
+                isInView ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+              }`}
+            >
               <div>
                 <div className="flex items-end gap-3">
                   <span className="text-6xl font-bold text-amber-400 leading-none">3</span>
