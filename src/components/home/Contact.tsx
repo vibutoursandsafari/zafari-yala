@@ -82,32 +82,32 @@ export default function Contact() {
 
               {/* Contact Information */}
               <div className="space-y-2 mb-6">
-                <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                <div className="flex flex-col gap-2 py-2 border-b border-gray-100 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3">
                     <FiPhone className="text-[#034d27] flex-shrink-0" size={18} />
                     <span className="text-gray-600 text-sm">Phone</span>
                   </div>
-                  <a href="tel:+94771234567" className="text-gray-900 font-medium hover:text-[#034d27] transition-colors text-sm">
+                  <a href="tel:+94771234567" className="text-gray-900 font-medium hover:text-[#034d27] transition-colors text-sm break-words sm:text-right">
                     +94 76 327 2593
                   </a>
                 </div>
 
-                <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                <div className="flex flex-col gap-2 py-2 border-b border-gray-100 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3">
                     <FiMail className="text-[#034d27] flex-shrink-0" size={18} />
                     <span className="text-gray-600 text-sm">Email</span>
                   </div>
-                  <a href="mailto:vibutoursandsafari@gmail.com" className="text-gray-900 font-medium hover:text-[#034d27] transition-colors text-sm">
+                  <a href="mailto:vibutoursandsafari@gmail.com" className="text-gray-900 font-medium hover:text-[#034d27] transition-colors text-sm break-all sm:text-right">
                     vibutoursandsafari@gmail.com
                   </a>
                 </div>
 
-                <div className="flex items-start justify-between py-2">
+                <div className="flex flex-col gap-2 py-2 sm:flex-row sm:items-start sm:justify-between">
                   <div className="flex items-center gap-3">
                     <FiMapPin className="text-[#034d27] flex-shrink-0 mt-0.5" size={18} />
                     <span className="text-gray-600 text-sm">Location</span>
                   </div>
-                  <p className="text-gray-900 font-medium text-right max-w-[60%] text-sm">
+                  <p className="text-gray-900 font-medium text-sm text-left max-w-full break-words sm:max-w-[60%] sm:text-right">
                     Yala National Park, Yala, Sri Lanka
                   </p>
                 </div>

@@ -9,18 +9,15 @@ import { getGalleryImages } from '@/services/galleryService';
 import { getArticles } from '@/services/articleService';
 import type { Article } from '@/types/article';
 
-const spanPattern = [
-  'row-span-2', 'row-span-1', 'row-span-1', 'row-span-2',
-  'row-span-1', 'row-span-2', 'row-span-1', 'row-span-1',
-];
-
 export default function Gallery() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const articleCardRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [articles, setArticles] = useState<Article[]>([]);
   const [loadingArticles, setLoadingArticles] = useState(true);
   const [isInView, setIsInView] = useState(false);
+  const [visibleArticles, setVisibleArticles] = useState<boolean[]>([]);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -69,6 +66,54 @@ export default function Gallery() {
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    setVisibleArticles(articles.map(() => false));
+    articleCardRefs.current = articleCardRefs.current.slice(0, articles.length);
+  }, [articles]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || articles.length === 0) return;
+
+    const isMobile = window.matchMedia('(max-width: 1023px)').matches;
+    if (!isMobile) {
+      setVisibleArticles(articles.map(() => true));
+      return;
+    }
+
+    const timers: number[] = [];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const idxAttr = (entry.target as HTMLElement).dataset.index;
+          const idx = idxAttr ? Number(idxAttr) : -1;
+          if (idx >= 0) {
+            const t = window.setTimeout(() => {
+              setVisibleArticles((prev) => {
+                if (prev[idx]) return prev;
+                const next = [...prev];
+                next[idx] = true;
+                return next;
+              });
+            }, idx * 120);
+            timers.push(t);
+          }
+
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    articleCardRefs.current.forEach((el) => el && observer.observe(el));
+
+    return () => {
+      observer.disconnect();
+      timers.forEach((t) => clearTimeout(t));
+    };
+  }, [articles]);
 
   // Display logic: show max 5 images, then a View More tile
   const displayImages = galleryImages.slice(0, 5);
@@ -250,10 +295,13 @@ export default function Gallery() {
                   <Link
                     key={a.id}
                     href={`/articles/${a.id}${a.slug ? '/' + a.slug : ''}`}
-                    className={`block transition-all duration-500 ${
-                      isInView ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+                    ref={(el) => {
+                      articleCardRefs.current[idx] = el;
+                    }}
+                    data-index={idx}
+                    className={`block transition-all duration-500 will-change-transform ${
+                      visibleArticles[idx] ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-95'
                     }`}
-                    style={{ transitionDelay: `${180 + idx * 100}ms` }}
                   >
                     <article style={{ flex: idx === 0 ? 2 : 1 }} className="bg-white rounded-xl p-1 shadow transition-shadow duration-300 group overflow-hidden h-full">
                       <div className="flex flex-col sm:flex-row gap-2 h-full">
