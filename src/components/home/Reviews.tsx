@@ -197,7 +197,7 @@ export default function Reviews() {
                           ))}
                         </div>
                       </div>
-                      <p className="min-h-24 break-words text-sm leading-relaxed text-emerald-900/80 line-clamp-5" title={review.message}>
+                      <p className="break-words whitespace-pre-line text-sm leading-relaxed text-emerald-900/80">
                         {review.message}
                       </p>
                       <p className="mt-4 text-xs text-emerald-900/55">

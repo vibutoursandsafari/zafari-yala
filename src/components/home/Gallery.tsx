@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { FiArrowRight } from 'react-icons/fi';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { GalleryImage } from '@/types/gallery';
 import { getGalleryImages } from '@/services/galleryService';
 import { getArticles } from '@/services/articleService';
@@ -15,10 +15,12 @@ const spanPattern = [
 ];
 
 export default function Gallery() {
+  const sectionRef = useRef<HTMLElement | null>(null);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [articles, setArticles] = useState<Article[]>([]);
   const [loadingArticles, setLoadingArticles] = useState(true);
+  const [isInView, setIsInView] = useState(false);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -49,13 +51,32 @@ export default function Gallery() {
     fetchArticles();
   }, []);
 
+  useEffect(() => {
+    const node = sectionRef.current;
+
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   // Display logic: show max 5 images, then a View More tile
   const displayImages = galleryImages.slice(0, 5);
   const desktopImages = displayImages; // up to 5 images on desktop
   const mobileImages = displayImages; // up to 5 images on mobile, then view more
 
   return (
-    <section className="relative bg-[#034d27] py-12 md:py-14 overflow-visible font-sans">
+    <section ref={sectionRef} className="relative bg-[#034d27] py-12 md:py-14 overflow-visible font-sans">
 
       {/* Background Lines Pattern */}
       <div className="absolute inset-0 pointer-events-none">
@@ -78,7 +99,11 @@ export default function Gallery() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* Left: gallery column (header + gallery) */}
-          <div>
+          <div
+            className={`transition-all duration-700 ease-out ${
+              isInView ? 'translate-x-0 opacity-100' : '-translate-x-6 opacity-0'
+            }`}
+          >
             {/* Left header */}
             <div className="mb-6 md:mb-8 md:pr-8 font-sans">
               <div className="flex flex-row items-center justify-between gap-3">
@@ -122,15 +147,27 @@ export default function Gallery() {
               <>
                 {/* Desktop Uniform Grid (3x2) - show up to 5 images, then a View More tile */}
                 <div className="hidden lg:grid grid-cols-3 auto-rows-[220px] gap-4 mb-10 lg:h-[456px]">
-                  {desktopImages.map((image) => (
-                    <div key={image.id} className="relative group overflow-hidden rounded-lg cursor-pointer transition-transform duration-300 hover:scale-[1.02] hover:z-10">
+                  {desktopImages.map((image, index) => (
+                    <div
+                      key={image.id}
+                      className={`relative group overflow-hidden rounded-lg cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:z-10 ${
+                        isInView ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
+                      }`}
+                      style={{ transitionDelay: `${index * 80}ms` }}
+                    >
                       <Image src={image.url} alt={image.alt} fill className="object-cover transition-all duration-500 group-hover:scale-110" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
                   ))}
 
                   {/* View More tile always appended as the last cell */}
-                  <Link href="/gallery" className="relative group overflow-hidden rounded-lg cursor-pointer transition-transform duration-300 hover:scale-[1.02] hover:z-10 flex items-center justify-center bg-white/5 border border-white/10">
+                  <Link
+                    href="/gallery"
+                    className={`relative group overflow-hidden rounded-lg cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:z-10 flex items-center justify-center bg-white/5 border border-white/10 ${
+                      isInView ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
+                    }`}
+                    style={{ transitionDelay: `${desktopImages.length * 80}ms` }}
+                  >
                     <div className="text-center px-4 py-2">
                       <div className="flex items-center justify-center gap-2">
                         <p className="text-amber-400 font-semibold text-lg">View More</p>
@@ -143,15 +180,27 @@ export default function Gallery() {
 
                 {/* Mobile Uniform Grid - show up to 5 images, then View More tile */}
                 <div className="grid lg:hidden grid-cols-2 auto-rows-[180px] gap-3 mb-8">
-                  {mobileImages.map((image) => (
-                    <div key={image.id} className="relative group overflow-hidden rounded-lg cursor-pointer">
+                  {mobileImages.map((image, index) => (
+                    <div
+                      key={image.id}
+                      className={`relative group overflow-hidden rounded-lg cursor-pointer transition-all duration-500 ${
+                        isInView ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+                      }`}
+                      style={{ transitionDelay: `${index * 70}ms` }}
+                    >
                       <Image src={image.url} alt={image.alt} fill className="object-cover transition-all duration-500 group-hover:scale-110" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
                   ))}
 
                   {/* Mobile View More tile */}
-                  <Link href="/gallery" className="relative group overflow-hidden rounded-lg cursor-pointer transition-transform duration-300 hover:scale-[1.02] hover:z-10 flex items-center justify-center bg-white/5 border border-white/10">
+                  <Link
+                    href="/gallery"
+                    className={`relative group overflow-hidden rounded-lg cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:z-10 flex items-center justify-center bg-white/5 border border-white/10 ${
+                      isInView ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+                    }`}
+                    style={{ transitionDelay: `${mobileImages.length * 70}ms` }}
+                  >
                     <div className="text-center px-4 py-2">
                       <div className="flex items-center justify-center gap-2">
                         <p className="text-amber-400 font-semibold">View More</p>
@@ -166,7 +215,11 @@ export default function Gallery() {
           </div>
 
           {/* Right: Articles column */}
-          <aside className="space-y-6 h-full">
+          <aside
+            className={`space-y-6 h-full transition-all duration-700 ease-out delay-150 ${
+              isInView ? 'translate-x-0 opacity-100' : 'translate-x-6 opacity-0'
+            }`}
+          >
             {/* Right header */}
             <div className="mb-4 md:mb-6 font-sans">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -194,7 +247,14 @@ export default function Gallery() {
             ) : (
               <div className="flex flex-col gap-4 h-full">
                 {articles.map((a, idx) => (
-                  <Link key={a.id} href={`/articles/${a.id}${a.slug ? '/' + a.slug : ''}`} className="block">
+                  <Link
+                    key={a.id}
+                    href={`/articles/${a.id}${a.slug ? '/' + a.slug : ''}`}
+                    className={`block transition-all duration-500 ${
+                      isInView ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+                    }`}
+                    style={{ transitionDelay: `${180 + idx * 100}ms` }}
+                  >
                     <article style={{ flex: idx === 0 ? 2 : 1 }} className="bg-white rounded-xl p-1 shadow transition-shadow duration-300 group overflow-hidden h-full">
                       <div className="flex flex-col sm:flex-row gap-2 h-full">
                         <div className="w-full sm:w-28 md:w-32 h-44 sm:h-full rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 relative">
