@@ -10,6 +10,32 @@ import Link from 'next/link';
 
 const categories = ['All', 'Wildlife', 'Animals', 'Safari Guide', 'Culture'];
 
+// Background wildlife icons scattered across the page
+interface BgIcon {
+  src: string;
+  style: {
+    top: string;
+    left?: string;
+    right?: string;
+    width: number;
+    opacity: number;
+    transform: string;
+  };
+}
+
+const bgIcons: BgIcon[] = [
+  { src: '/assets/icons/ic_elephant_white.png', style: { top: '6%',  left: '3%',   width: 72,  opacity: 0.08, transform: 'rotate(8deg)'  } },
+  { src: '/assets/icons/ic_bird_white.png',     style: { top: '4%',  right: '6%',  width: 56,  opacity: 0.08, transform: 'rotate(-14deg)' } },
+  { src: '/assets/icons/ic_tiger_white.png',    style: { top: '18%', left: '90%',  width: 64,  opacity: 0.07, transform: 'rotate(5deg)'   } },
+  { src: '/assets/icons/ic_trunk_white.png',    style: { top: '35%', left: '2%',   width: 60,  opacity: 0.07, transform: 'rotate(-6deg)'  } },
+  { src: '/assets/icons/ic_bear_white.png',     style: { top: '50%', right: '3%',  width: 68,  opacity: 0.07, transform: 'rotate(10deg)'  } },
+  { src: '/assets/icons/ic_eagle_white.png',    style: { top: '65%', left: '88%',  width: 72,  opacity: 0.06, transform: 'rotate(-8deg)'  } },
+  { src: '/assets/icons/ic_elephant_white.png', style: { top: '75%', left: '5%',   width: 60,  opacity: 0.07, transform: 'rotate(12deg)'  } },
+  { src: '/assets/icons/ic_bird_white.png',     style: { top: '88%', left: '80%',  width: 52,  opacity: 0.08, transform: 'rotate(6deg)'   } },
+  { src: '/assets/icons/jeep_icon_white_01.png',style: { top: '92%', left: '10%',  width: 70,  opacity: 0.07, transform: 'rotate(-4deg)'  } },
+  { src: '/assets/icons/ic_tiger_white.png',    style: { top: '28%', left: '46%',  width: 54,  opacity: 0.05, transform: 'rotate(3deg)'   } },
+];
+
 export default function ArticlesPageClient() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,8 +53,8 @@ export default function ArticlesPageClient() {
     fetchArticles();
   }, []);
 
-  const filteredArticles = selectedCategory === 'All' 
-    ? articles 
+  const filteredArticles = selectedCategory === 'All'
+    ? articles
     : articles.filter(article => article.category === selectedCategory);
 
   useEffect(() => {
@@ -74,14 +100,50 @@ export default function ArticlesPageClient() {
   }, [filteredArticles, loading]);
 
   return (
-    <div className="min-h-screen pt-20 md:pt-28 bg-gray-50">
-      {/* Simple Title */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 text-center">Read Articles</h1>
+    <div className="relative min-h-screen overflow-hidden bg-[linear-gradient(135deg,#f5f7f2_0%,#eaf4e4_45%,#dfeedd_100%)] pt-20 md:pt-28">
+
+      {/* ── Decorative blurred orbs ── */}
+      <div className="pointer-events-none absolute -left-32 top-10 h-72 w-72 rounded-full bg-emerald-300/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 bottom-32 h-80 w-80 rounded-full bg-lime-300/20 blur-3xl" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-200/15 blur-3xl" />
+
+      {/* ── Scattered wildlife icons ── */}
+      <div className="pointer-events-none absolute inset-0 hidden lg:block">
+        {bgIcons.map((icon, i) => (
+          <img
+            key={i}
+            src={icon.src}
+            alt=""
+            style={{
+              position: 'absolute',
+              width: icon.style.width,
+              height: icon.style.width,
+              opacity: icon.style.opacity,
+              transform: icon.style.transform,
+              top: icon.style.top,
+              left: icon.style.left,
+              right: icon.style.right,
+              filter: 'grayscale(100%) brightness(0)',
+            }}
+          />
+        ))}
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Category Filter Buttons */}
+      {/* ── Page header ── */}
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 text-center">
+        <span className="mb-4 inline-block rounded-full border border-emerald-200 bg-white/70 px-5 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-emerald-700 shadow-sm backdrop-blur-sm">
+          Our Blog
+        </span>
+        <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold text-emerald-950">
+          Read Articles
+        </h1>
+        <p className="mt-2 mx-auto max-w-xl text-sm text-emerald-900/65 sm:text-base">
+          Wildlife stories, safari guides, and cultural insights from the heart of Sri Lanka.
+        </p>
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        {/* ── Category Filter Buttons ── */}
         <div className="mb-8">
           <div className="flex flex-wrap gap-3 justify-center">
             {categories.map((category) => (
@@ -94,8 +156,8 @@ export default function ArticlesPageClient() {
                 className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 shadow-sm
                   ${
                     selectedCategory === category
-                      ? 'bg-[#03381c] text-white shadow-lg shadow-emerald-200 scale-105'
-                      : 'bg-white text-gray-700 hover:bg-gray-50 hover:shadow-md border border-gray-200'
+                      ? 'bg-[linear-gradient(135deg,#0f6b3a_0%,#15803d_55%,#166534_100%)] text-white shadow-lg shadow-emerald-300/40 scale-105'
+                      : 'bg-white/80 text-emerald-900 hover:bg-white hover:shadow-md border border-emerald-900/10 backdrop-blur-sm'
                   }`}
               >
                 {category}
@@ -104,7 +166,7 @@ export default function ArticlesPageClient() {
           </div>
         </div>
 
-        {/* Loading State */}
+        {/* ── Loading State ── */}
         {loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, index) => (
@@ -113,7 +175,7 @@ export default function ArticlesPageClient() {
           </div>
         )}
 
-        {/* Articles Grid */}
+        {/* ── Articles Grid ── */}
         {!loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredArticles.map((article, idx) => {
@@ -130,7 +192,7 @@ export default function ArticlesPageClient() {
                   }`}
                 >
                   <Link href={href} className="block">
-                    <ArticlesCard 
+                    <ArticlesCard
                       id={article.id}
                       title={article.title}
                       content={article.content}
@@ -146,16 +208,16 @@ export default function ArticlesPageClient() {
           </div>
         )}
 
-        {/* Empty State */}
+        {/* ── Empty State ── */}
         {!loading && filteredArticles.length === 0 && (
           <div className="text-center py-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
-              <FiBook className="text-gray-400" size={32} />
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-emerald-900/10 bg-white/80 shadow-sm mb-4 backdrop-blur-sm">
+              <FiBook className="text-emerald-500" size={28} />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-emerald-950 mb-2">
               No articles found
             </h3>
-            <p className="text-gray-600">
+            <p className="text-emerald-900/60 text-sm">
               Try selecting a different category
             </p>
           </div>
